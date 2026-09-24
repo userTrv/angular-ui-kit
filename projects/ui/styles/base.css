@@ -1,0 +1,47 @@
+/*
+ * Base layer shared by all @usertrv/ui components. Kept intentionally tiny:
+ * the kit never styles bare HTML elements, only its own hosts and helpers.
+ */
+
+/* A scoped theme/density root (not <html>) gets the themed foreground/background. */
+[data-ui-theme]:not(:root) {
+  background-color: var(--ui-color-bg);
+  color: var(--ui-color-text);
+}
+
+/* Visually hidden, still announced by screen readers. */
+.ui-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Backdrop used by dialog/drawer overlays (CDK overlay adds .cdk-overlay-backdrop). */
+.cdk-overlay-backdrop.ui-backdrop {
+  background: var(--ui-color-backdrop);
+}
+.cdk-overlay-backdrop.ui-backdrop-transparent {
+  background: transparent;
+}
+
+/* Overlay panes created by the kit inherit the kit typography. */
+.cdk-overlay-pane.ui-overlay-pane {
+  font-family: var(--ui-font-family-sans);
+  font-size: var(--ui-font-size-md);
+  line-height: var(--ui-line-height-normal);
+  color: var(--ui-color-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ui-duration-fast: 0ms;
+    --ui-duration-normal: 0ms;
+    --ui-duration-slow: 0ms;
+  }
+}
