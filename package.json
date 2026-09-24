@@ -20,7 +20,8 @@
     "test:a11y": "node scripts/a11y-e2e.mjs",
     "lint": "node scripts/build-tokens.mjs --check && node scripts/gen-docs.mjs --check && ng lint ui && ng lint docs",
     "changeset": "changeset",
-    "version-packages": "changeset version"
+    "version-packages": "changeset version",
+    "size": "node scripts/size-report.mjs"
   },
   "dependencies": {
     "@angular/cdk": "22.2.0",

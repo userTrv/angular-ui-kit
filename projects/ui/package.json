@@ -10,7 +10,14 @@
     "directory": "projects/ui"
   },
   "homepage": "https://usertrv.dev/projects/angular-ui-kit/",
-  "keywords": ["angular", "ui-kit", "design-system", "cdk", "a11y", "signals"],
+  "keywords": [
+    "angular",
+    "ui-kit",
+    "design-system",
+    "cdk",
+    "a11y",
+    "signals"
+  ],
   "peerDependencies": {
     "@angular/cdk": "^22.2.0",
     "@angular/common": "^22.2.0",
@@ -20,5 +27,15 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": ["*.css"]
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    "./styles/*": {
+      "default": "./styles/*"
+    },
+    "./tokens/tokens.json": {
+      "default": "./tokens/tokens.json"
+    }
+  }
 }
