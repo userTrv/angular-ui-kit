@@ -1,0 +1,93 @@
+<div class="ui-table__probe" aria-hidden="true" #probe></div>
+<div
+  role="grid"
+  class="ui-table__grid"
+  uiGrid
+  [uiGridRowCount]="viewRows().length + 1"
+  [uiGridColCount]="colCount()"
+  [uiGridPageSize]="pageSize()"
+  (uiGridRowRequest)="onRowRequest($event)"
+  [attr.aria-label]="label() || null"
+  [attr.aria-labelledby]="labelledBy() || null"
+  [attr.aria-rowcount]="ariaRowCount()"
+  [attr.aria-colcount]="colCount()"
+  [attr.aria-multiselectable]="selectable() || null"
+  [attr.aria-busy]="loading() || null"
+>
+  <ng-template #head>
+    <div role="rowgroup" class="ui-table__head">
+      <div uiTableHeaderRow></div>
+    </div>
+  </ng-template>
+
+  <ng-template #states>
+    @if (loading() && viewRows().length === 0) {
+      @for (row of skeletonRows; track row) {
+        <div class="ui-table__row ui-table__row--skeleton" aria-hidden="true">
+          @if (selectable()) {
+            <div class="ui-table__cell"></div>
+          }
+          @for (col of columns(); track $index) {
+            <div class="ui-table__cell"><span class="ui-table__skeleton"></span></div>
+          }
+        </div>
+      }
+    } @else if (showEmpty()) {
+      <div role="row" class="ui-table__row ui-table__row--empty" aria-rowindex="2">
+        <div
+          role="gridcell"
+          class="ui-table__cell ui-table__empty"
+          aria-colindex="1"
+          [attr.aria-colspan]="colCount()"
+        >
+          @if (emptyDef(); as def) {
+            <ng-container *ngTemplateOutlet="def.template" />
+          } @else {
+            No data
+          }
+        </div>
+      </div>
+    }
+  </ng-template>
+
+  @if (virtual()) {
+    <div class="ui-table__scroller" cdkVirtualScrollingElement #scroller>
+      <div class="ui-table__inner">
+        <ng-container *ngTemplateOutlet="head" />
+        <div role="rowgroup" class="ui-table__body">
+          <cdk-virtual-scroll-viewport
+            class="ui-table__viewport"
+            [itemSize]="rowHeightPx()"
+            [minBufferPx]="rowHeightPx() * 5"
+            [maxBufferPx]="rowHeightPx() * 10"
+          >
+            <div
+              uiTableRow
+              *cdkVirtualFor="
+                let entry of viewRows();
+                trackBy: trackEntry;
+                templateCacheSize: 0;
+                let i = index
+              "
+              [entry]="entry"
+              [index]="i"
+            ></div>
+          </cdk-virtual-scroll-viewport>
+          <ng-container *ngTemplateOutlet="states" />
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="ui-table__scroller" #scroller>
+      <div class="ui-table__inner">
+        <ng-container *ngTemplateOutlet="head" />
+        <div role="rowgroup" class="ui-table__body">
+          @for (entry of viewRows(); track entry.key; let i = $index) {
+            <div uiTableRow [entry]="entry" [index]="i"></div>
+          }
+          <ng-container *ngTemplateOutlet="states" />
+        </div>
+      </div>
+    </div>
+  }
+</div>

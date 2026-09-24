@@ -1,0 +1,273 @@
+.ui-table {
+  --_border: var(--ui-color-border);
+  --_row-h: var(--ui-row-height);
+  --_cell-pad: var(--ui-space-3);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  border: var(--ui-border-width) solid var(--_border);
+  border-radius: var(--ui-radius-lg);
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text);
+  font-family: var(--ui-font-family-sans);
+  font-size: var(--ui-font-size-md);
+  line-height: var(--ui-font-line-height-normal);
+  overflow: hidden;
+}
+.ui-table--virtual {
+  height: 26rem;
+}
+
+.ui-table__probe {
+  position: absolute;
+  width: 0;
+  height: var(--ui-row-height);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ui-table__grid {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+.ui-table__grid:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: calc(-1 * var(--ui-focus-ring-width));
+}
+
+/* Scrolls in both directions; narrow screens get horizontal scrolling instead of squeezed columns. */
+.ui-table__scroller {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  /* Keeps focused rows clear of the sticky header. */
+  scroll-padding-top: var(--_row-h);
+}
+.ui-table__inner {
+  width: 100%;
+  min-width: var(--_min-width);
+}
+.ui-table--sticky-header .ui-table__head {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+.ui-table__viewport .cdk-virtual-scroll-content-wrapper {
+  width: 100%;
+}
+
+/* ---- Rows: every row is a CSS grid on the shared column template ---- */
+.ui-table__row {
+  --_row-bg: var(--ui-color-surface);
+  display: grid;
+  grid-template-columns: var(--_columns);
+  box-sizing: border-box;
+  min-height: var(--_row-h);
+  border-bottom: var(--ui-border-width) solid var(--_border);
+  background: var(--_row-bg);
+}
+.ui-table--virtual .ui-table__row {
+  height: var(--_row-h);
+}
+.ui-table__row--header {
+  --_row-bg: var(--ui-table-header-bg);
+  color: var(--ui-color-text-muted);
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-semibold);
+}
+.ui-table--striped .ui-table__row--odd {
+  --_row-bg: var(--ui-color-surface-sunken);
+}
+.ui-table__row--body:hover {
+  --_row-bg: var(--ui-table-row-hover);
+}
+.ui-table__row--selected,
+.ui-table__row--selected:hover {
+  --_row-bg: var(--ui-table-row-selected);
+}
+.ui-table--loading .ui-table__body {
+  opacity: 0.55;
+  transition: opacity var(--ui-duration-normal) var(--ui-easing-standard);
+}
+.ui-table__row--skeleton,
+.ui-table__row--empty {
+  grid-template-columns: var(--_columns);
+}
+
+/* ---- Cells ---- */
+.ui-table__cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  box-sizing: border-box;
+  min-width: 0;
+  padding: var(--ui-space-2) var(--_cell-pad);
+  overflow: hidden;
+  background: var(--_row-bg);
+}
+.ui-table--virtual .ui-table__cell {
+  padding-block: 0;
+  white-space: nowrap;
+}
+.ui-table__cell:focus-visible,
+.ui-table__cell :focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: calc(-1 * var(--ui-focus-ring-width));
+}
+.ui-table__cell--end {
+  justify-content: flex-end;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+.ui-table__text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ui-table__cell--select {
+  justify-content: center;
+  padding: 0;
+  user-select: none;
+}
+.ui-table__checkbox {
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  accent-color: var(--ui-color-primary);
+  cursor: pointer;
+}
+.ui-table__cell--sticky {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+}
+.ui-table__cell--sticky-offset {
+  inset-inline-start: var(--_select-w);
+}
+.ui-table__cell--sticky:not(.ui-table__cell--select),
+.ui-table__cell--sticky.ui-table__cell--select:only-child {
+  box-shadow: inset calc(-1 * var(--ui-border-width)) 0 0 var(--_border);
+}
+.ui-table__empty {
+  grid-column: 1 / -1;
+  justify-content: center;
+  padding: var(--ui-space-8) var(--_cell-pad);
+  color: var(--ui-color-text-muted);
+  white-space: normal;
+}
+
+/* ---- Header: sort button and resize handle ---- */
+.ui-table__cell--header {
+  padding-inline-end: calc(var(--_cell-pad) + 0.25rem);
+}
+.ui-table__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-1);
+  min-width: 0;
+  margin: 0 calc(-1 * var(--ui-space-1));
+  padding: var(--ui-space-1);
+  border: 0;
+  border-radius: var(--ui-radius-sm);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+.ui-table__sort:hover,
+.ui-table__sort[data-direction] {
+  color: var(--ui-color-text);
+}
+.ui-table__sort-icon {
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: currentColor;
+}
+.ui-table__sort-icon path {
+  opacity: 0.35;
+  transition: opacity var(--ui-duration-fast) var(--ui-easing-standard);
+}
+.ui-table__sort[data-direction='asc'] .ui-table__sort-asc,
+.ui-table__sort[data-direction='desc'] .ui-table__sort-desc {
+  opacity: 1;
+}
+.ui-table__sort[data-direction='asc'] .ui-table__sort-desc,
+.ui-table__sort[data-direction='desc'] .ui-table__sort-asc {
+  opacity: 0;
+}
+.ui-table__resize {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: 0.5rem;
+  cursor: col-resize;
+  touch-action: none;
+}
+.ui-table__resize::after {
+  content: '';
+  position: absolute;
+  inset-block: 25%;
+  inset-inline-end: 0;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--_border);
+  transition: background-color var(--ui-duration-fast) var(--ui-easing-standard);
+}
+.ui-table__resize:hover::after,
+.ui-table__resize:focus-visible::after,
+.ui-table__resize--dragging::after {
+  inset-block: 0;
+  background: var(--ui-color-primary);
+}
+.ui-table__resize:focus-visible {
+  outline-offset: 0;
+}
+
+/* ---- Loading skeleton ---- */
+.ui-table__skeleton {
+  display: block;
+  width: 70%;
+  height: 0.75rem;
+  border-radius: var(--ui-radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--ui-color-skeleton) 25%,
+    var(--ui-color-skeleton-shine) 50%,
+    var(--ui-color-skeleton) 75%
+  );
+  background-size: 200% 100%;
+  animation: ui-table-shimmer 1.4s linear infinite;
+}
+@keyframes ui-table-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ui-table__skeleton {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ui-table__row--selected {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+  .ui-table__resize::after {
+    background: CanvasText;
+  }
+  .ui-table__skeleton {
+    background: GrayText;
+  }
+}
