@@ -1,0 +1,172 @@
+.ui-calendar {
+  --_cell: var(--ui-calendar-cell-size, var(--ui-control-height-md));
+
+  display: inline-block;
+  box-sizing: border-box;
+  padding: var(--ui-space-3);
+  color: var(--ui-color-text);
+  font-size: var(--ui-font-size-control);
+}
+
+.ui-calendar__header {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-1);
+  margin-bottom: var(--ui-space-2);
+}
+.ui-calendar__title {
+  flex: 1;
+  text-align: center;
+  font-weight: var(--ui-font-weight-semibold);
+  white-space: nowrap;
+}
+
+.ui-calendar__nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ui-control-height-sm);
+  height: var(--ui-control-height-sm);
+  padding: 0;
+  border: 0;
+  border-radius: var(--ui-radius-md);
+  background: transparent;
+  color: var(--ui-color-text-muted);
+  cursor: pointer;
+}
+.ui-calendar__nav:hover:not([aria-disabled='true']) {
+  background: var(--ui-color-surface-hover);
+  color: var(--ui-color-text);
+}
+.ui-calendar__nav[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ui-calendar__nav svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ui-calendar__nav:dir(rtl) svg {
+  transform: scaleX(-1);
+}
+
+.ui-calendar__grid {
+  border-collapse: separate;
+  border-spacing: 0 var(--ui-space-0-5);
+  table-layout: fixed;
+}
+.ui-calendar__weekday {
+  width: var(--_cell);
+  padding-bottom: var(--ui-space-1);
+  color: var(--ui-color-text-muted);
+  font-size: var(--ui-font-size-xs);
+  font-weight: var(--ui-font-weight-medium);
+  text-align: center;
+}
+
+.ui-calendar__cell {
+  position: relative;
+  width: var(--_cell);
+  height: var(--_cell);
+  padding: 0;
+  text-align: center;
+  cursor: pointer;
+}
+/* The ring is drawn on the day circle instead (below). */
+.ui-calendar__cell:focus,
+.ui-calendar__cell:focus-visible {
+  outline: none;
+}
+.ui-calendar__cell--empty {
+  cursor: default;
+}
+.ui-calendar__day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--_cell) - 4px);
+  height: calc(var(--_cell) - 4px);
+  box-sizing: border-box;
+  border: var(--ui-border-width) solid transparent;
+  border-radius: var(--ui-radius-full);
+  transition: background-color var(--ui-duration-fast) var(--ui-easing-standard);
+}
+.ui-calendar__cell:hover:not(.ui-calendar__cell--disabled, .ui-calendar__cell--empty) .ui-calendar__day {
+  background: var(--ui-color-surface-hover);
+}
+.ui-calendar__cell:focus-visible .ui-calendar__day {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: 1px;
+}
+.ui-calendar__cell--today .ui-calendar__day {
+  border-color: var(--ui-color-border-strong);
+  font-weight: var(--ui-font-weight-semibold);
+}
+.ui-calendar__cell--disabled {
+  cursor: not-allowed;
+  color: var(--ui-color-text-disabled);
+}
+.ui-calendar__cell--disabled .ui-calendar__day {
+  text-decoration: line-through;
+}
+
+/* Range band (selected range and hover/keyboard preview) sits behind the day circles. */
+.ui-calendar--range .ui-calendar__cell--selected,
+.ui-calendar--range .ui-calendar__cell--preview {
+  background-image: linear-gradient(var(--_band), var(--_band));
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% calc(var(--_cell) - 4px);
+}
+.ui-calendar--range .ui-calendar__cell--selected {
+  --_band: var(--ui-color-primary-subtle);
+}
+.ui-calendar--range .ui-calendar__cell--preview:not(.ui-calendar__cell--selected) {
+  --_band: var(--ui-color-surface-hover);
+}
+.ui-calendar__cell--range-start {
+  border-start-start-radius: var(--ui-radius-full);
+  border-end-start-radius: var(--ui-radius-full);
+}
+.ui-calendar__cell--range-end {
+  border-start-end-radius: var(--ui-radius-full);
+  border-end-end-radius: var(--ui-radius-full);
+}
+
+.ui-calendar:not(.ui-calendar--range) .ui-calendar__cell--selected .ui-calendar__day,
+.ui-calendar__cell--range-start .ui-calendar__day,
+.ui-calendar__cell--range-end .ui-calendar__day {
+  background: var(--ui-color-primary);
+  border-color: var(--ui-color-primary);
+  color: var(--ui-color-on-primary);
+}
+.ui-calendar__cell--range-start:hover .ui-calendar__day,
+.ui-calendar__cell--range-end:hover .ui-calendar__day,
+.ui-calendar:not(.ui-calendar--range) .ui-calendar__cell--selected:hover .ui-calendar__day {
+  background: var(--ui-color-primary-hover);
+}
+
+@media (forced-colors: active) {
+  .ui-calendar__cell--selected .ui-calendar__day,
+  .ui-calendar__cell--range-start .ui-calendar__day,
+  .ui-calendar__cell--range-end .ui-calendar__day {
+    forced-color-adjust: none;
+    background: Highlight;
+    border-color: Highlight;
+    color: HighlightText;
+  }
+  .ui-calendar__cell--preview .ui-calendar__day {
+    border: var(--ui-border-width) dashed Highlight;
+  }
+  .ui-calendar__cell--disabled {
+    color: GrayText;
+  }
+  .ui-calendar__cell--today .ui-calendar__day {
+    border-color: CanvasText;
+  }
+}

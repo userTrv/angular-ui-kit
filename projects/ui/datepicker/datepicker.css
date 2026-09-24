@@ -1,0 +1,121 @@
+/* Shared by ui-datepicker and ui-date-range-picker. */
+.ui-datepicker,
+.ui-date-range-picker {
+  --_border: var(--ui-input-border);
+
+  display: inline-block;
+  min-width: 0;
+  color: var(--ui-color-text);
+  font-size: var(--ui-font-size-control);
+}
+.ui-datepicker--invalid,
+.ui-date-range-picker--invalid {
+  --_border: var(--ui-color-danger);
+}
+
+.ui-datepicker__field {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-1);
+  box-sizing: border-box;
+  min-height: var(--ui-control-height-md);
+  padding-inline: var(--ui-control-padding-x) var(--ui-space-1);
+  border: var(--ui-border-width) solid var(--_border);
+  border-radius: var(--ui-input-radius);
+  background: var(--ui-input-bg);
+  transition: border-color var(--ui-duration-fast) var(--ui-easing-standard);
+}
+.ui-datepicker__field:hover:not(:has(:disabled)) {
+  border-color: var(--ui-input-border-hover);
+}
+.ui-datepicker--invalid .ui-datepicker__field:hover,
+.ui-date-range-picker--invalid .ui-datepicker__field:hover {
+  border-color: var(--ui-color-danger-hover);
+}
+.ui-datepicker__field:has(.ui-datepicker__input:focus-visible) {
+  border-color: var(--ui-input-border-focus);
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: 1px;
+}
+.ui-datepicker--disabled .ui-datepicker__field,
+.ui-date-range-picker--disabled .ui-datepicker__field {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ui-datepicker__input {
+  flex: 1 1 auto;
+  width: 11ch;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+.ui-datepicker__input::placeholder {
+  color: var(--ui-color-text-muted);
+}
+.ui-datepicker__input:disabled {
+  cursor: not-allowed;
+}
+.ui-datepicker__separator {
+  color: var(--ui-color-text-muted);
+}
+
+.ui-datepicker__toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--ui-control-height-md) - 0.5rem);
+  height: calc(var(--ui-control-height-md) - 0.5rem);
+  padding: 0;
+  border: 0;
+  border-radius: var(--ui-radius-sm);
+  background: transparent;
+  color: var(--ui-color-text-muted);
+  cursor: pointer;
+}
+.ui-datepicker__toggle:hover:not(:disabled) {
+  background: var(--ui-color-surface-hover);
+  color: var(--ui-color-text);
+}
+.ui-datepicker__toggle:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: 1px;
+}
+.ui-datepicker__toggle:disabled {
+  cursor: not-allowed;
+}
+.ui-datepicker__toggle svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+/* Popup (rendered in the CDK overlay container). */
+.ui-datepicker__dialog {
+  border: var(--ui-border-width) solid var(--ui-color-border);
+  border-radius: var(--ui-overlay-radius);
+  background: var(--ui-overlay-bg);
+  box-shadow: var(--ui-overlay-shadow);
+}
+
+@media (forced-colors: active) {
+  .ui-datepicker__field {
+    border-color: FieldText;
+  }
+  .ui-datepicker--invalid .ui-datepicker__field,
+  .ui-date-range-picker--invalid .ui-datepicker__field {
+    border-style: dashed;
+    border-width: 2px;
+  }
+  .ui-datepicker__dialog {
+    border-color: CanvasText;
+  }
+}

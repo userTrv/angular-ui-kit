@@ -1,0 +1,93 @@
+<div class="ui-calendar__header">
+  <button
+    type="button"
+    class="ui-calendar__nav"
+    [attr.aria-label]="intl.previousYear"
+    [attr.aria-disabled]="!canGoBackYear() || null"
+    (click)="navigate(-12)"
+  >
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 5l-5 5 5 5M15 5l-5 5 5 5" /></svg>
+  </button>
+  <button
+    type="button"
+    class="ui-calendar__nav"
+    [attr.aria-label]="intl.previousMonth"
+    [attr.aria-disabled]="!canGoBack() || null"
+    (click)="navigate(-1)"
+  >
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 5l-5 5 5 5" /></svg>
+  </button>
+  <div class="ui-calendar__title" [id]="titleId" aria-live="polite">{{ monthLabel() }}</div>
+  <button
+    type="button"
+    class="ui-calendar__nav"
+    [attr.aria-label]="intl.nextMonth"
+    [attr.aria-disabled]="!canGoForward() || null"
+    (click)="navigate(1)"
+  >
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 5l5 5-5 5" /></svg>
+  </button>
+  <button
+    type="button"
+    class="ui-calendar__nav"
+    [attr.aria-label]="intl.nextYear"
+    [attr.aria-disabled]="!canGoForwardYear() || null"
+    (click)="navigate(12)"
+  >
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l5 5-5 5M10 5l5 5-5 5" /></svg>
+  </button>
+</div>
+
+<!-- eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -- delegated from the focusable gridcells -->
+<table
+  class="ui-calendar__grid"
+  role="grid"
+  [attr.aria-labelledby]="titleId"
+  [attr.aria-multiselectable]="selectionMode() === 'range' || null"
+  (keydown)="onKeydown($event)"
+  (focusin)="onGridFocus(true)"
+  (focusout)="onGridFocus(false)"
+  (mouseleave)="onCellHover(null)"
+>
+  <thead>
+    <tr role="row">
+      @for (weekday of weekdays(); track weekday.day) {
+        <th role="columnheader" scope="col" class="ui-calendar__weekday">
+          <span aria-hidden="true">{{ weekday.short }}</span>
+          <span class="ui-sr-only">{{ weekday.long }}</span>
+        </th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @for (week of weeks(); track $index) {
+      <tr role="row">
+        @for (cell of week; track $index) {
+          @if (cell) {
+            <td
+              role="gridcell"
+              class="ui-calendar__cell"
+              [class.ui-calendar__cell--today]="cell.today"
+              [class.ui-calendar__cell--selected]="cell.selected"
+              [class.ui-calendar__cell--range-start]="cell.rangeStart"
+              [class.ui-calendar__cell--range-end]="cell.rangeEnd"
+              [class.ui-calendar__cell--preview]="cell.preview"
+              [class.ui-calendar__cell--disabled]="cell.disabled"
+              [attr.tabindex]="cell.active ? 0 : -1"
+              [attr.aria-label]="cell.label"
+              [attr.aria-selected]="cell.selected"
+              [attr.aria-current]="cell.today ? 'date' : null"
+              [attr.aria-disabled]="cell.disabled || null"
+              (click)="select(cell.date)"
+              (mouseenter)="onCellHover(cell.date)"
+            >
+              <span class="ui-calendar__day" aria-hidden="true">{{ cell.text }}</span>
+            </td>
+          } @else {
+            <td role="gridcell" class="ui-calendar__cell ui-calendar__cell--empty"></td>
+          }
+        }
+      </tr>
+    }
+  </tbody>
+</table>

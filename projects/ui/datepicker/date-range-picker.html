@@ -1,0 +1,82 @@
+<div
+  #field
+  class="ui-datepicker__field"
+  role="group"
+  [attr.aria-label]="ariaLabel()"
+  [attr.aria-labelledby]="ariaLabelledby()"
+>
+  <input
+    class="ui-datepicker__input"
+    type="text"
+    autocomplete="off"
+    [id]="inputId()"
+    [value]="startText.text()"
+    [placeholder]="placeholderText()"
+    [disabled]="isDisabled()"
+    [readOnly]="readonly()"
+    [required]="required()"
+    [attr.name]="name() ? name() + '-start' : null"
+    [attr.aria-label]="intl.startDate"
+    [attr.aria-describedby]="ariaDescribedby()"
+    [attr.aria-invalid]="formInvalid() || startInvalid() || null"
+    (input)="onInput(startText, $event)"
+    (blur)="onBlur(startText)"
+    (keydown)="onInputKeydown($event)"
+  />
+  <span class="ui-datepicker__separator" aria-hidden="true">–</span>
+  <input
+    class="ui-datepicker__input"
+    type="text"
+    autocomplete="off"
+    [id]="inputId() + '-end'"
+    [value]="endText.text()"
+    [placeholder]="placeholderText()"
+    [disabled]="isDisabled()"
+    [readOnly]="readonly()"
+    [required]="required()"
+    [attr.name]="name() ? name() + '-end' : null"
+    [attr.aria-label]="intl.endDate"
+    [attr.aria-describedby]="ariaDescribedby()"
+    [attr.aria-invalid]="formInvalid() || endInvalid() || null"
+    (input)="onInput(endText, $event)"
+    (blur)="onBlur(endText)"
+    (keydown)="onInputKeydown($event)"
+  />
+  <button
+    #toggleButton
+    type="button"
+    class="ui-datepicker__toggle"
+    aria-haspopup="dialog"
+    [attr.aria-label]="intl.chooseDateRange"
+    [attr.aria-expanded]="popup.isOpen()"
+    [disabled]="isDisabled() || readonly()"
+    (click)="toggle()"
+  >
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <rect x="3" y="4.5" width="14" height="12.5" rx="2" />
+      <path d="M3 8.5h14M7 2.5v4M13 2.5v4" />
+    </svg>
+  </button>
+</div>
+
+<ng-template #popupTemplate>
+  <div
+    class="ui-datepicker__dialog"
+    role="dialog"
+    aria-modal="true"
+    cdkTrapFocus
+    [attr.aria-label]="intl.chooseDateRange"
+    (keydown.escape)="close()"
+  >
+    <ui-calendar
+      selectionMode="range"
+      [(range)]="draft"
+      [min]="minDate()"
+      [max]="maxDate()"
+      [dateFilter]="dateFilter()"
+      [locale]="locale()"
+      [firstDayOfWeek]="firstDayOfWeek()"
+      (rangeSelected)="onRangeSelected($event)"
+    />
+  </div>
+</ng-template>
