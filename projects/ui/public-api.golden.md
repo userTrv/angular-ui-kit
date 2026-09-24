@@ -37,6 +37,68 @@
   - method `focus(): void`
   - method `getLabel(): string`
 
+## @usertrv/ui/accordion
+
+- Component · UiAccordion · selector: `ui-accordion` · exportAs: uiAccordion
+  - input `multi?: boolean` = `false`
+  - method `openAll(): void`
+  - method `closeAll(): void`
+- Component · UiAccordionItem · selector: `ui-accordion-item` · exportAs: uiAccordionItem
+  - input `label?: string` = `''`
+  - model `expanded?: boolean` = `false`
+  - input `disabled?: boolean` = `false`
+  - input `headingLevel?: number` = `3`
+  - method `toggle(): void`
+  - method `open(): void`
+  - method `close(): void`
+
+## @usertrv/ui/avatar
+
+- Function · avatarColorIndex
+  - `function avatarColorIndex(name: string, paletteSize?: number): number`
+- Function · initialsFrom
+  - `function initialsFrom(name: string | null | undefined): string`
+- Const · UI_AVATAR_PALETTE
+  - `const UI_AVATAR_PALETTE: readonly UiAvatarColor[]`
+- Component · UiAvatar · selector: `ui-avatar`
+  - input `name?: string` = `''`
+  - input `src?: string | null | undefined` = `undefined`
+  - input `size?: UiAvatarSize | undefined` = `undefined`
+  - input `status?: UiAvatarStatus | null | undefined` = `undefined`
+  - input `statusLabel?: string | undefined` = `undefined`
+  - input `decorative?: boolean` = `false`
+- Interface · UiAvatarColor
+  - `interface UiAvatarColor { background: string; foreground: string; }`
+- Component · UiAvatarGroup · selector: `ui-avatar-group`
+  - input `max?: number` = `4`
+  - input `size?: UiAvatarSize` = `'md'`
+  - input `aria-label?: string | undefined` = `undefined`
+  - property `overflow: import("@angular/core").Signal<number>`
+- Type · UiAvatarSize
+  - `type UiAvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';`
+- Type · UiAvatarStatus
+  - `type UiAvatarStatus = 'online' | 'away' | 'busy' | 'offline';`
+
+## @usertrv/ui/badge
+
+- Component · UiBadge · selector: `ui-badge`
+  - input `variant?: UiBadgeVariant` = `'neutral'`
+  - input `appearance?: UiBadgeAppearance` = `'subtle'`
+  - input `size?: UiBadgeSize` = `'md'`
+  - input `dot?: boolean` = `false`
+- Type · UiBadgeAppearance
+  - `type UiBadgeAppearance = 'subtle' | 'solid';`
+- Type · UiBadgeSize
+  - `type UiBadgeSize = 'sm' | 'md';`
+- Type · UiBadgeVariant
+  - `type UiBadgeVariant = 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info';`
+- Component · UiTag · selector: `ui-tag`
+  - input `variant?: UiBadgeVariant` = `'neutral'`
+  - input `removable?: boolean` = `false`
+  - input `disabled?: boolean` = `false`
+  - output `removed: void`
+  - method `remove(): void`
+
 ## @usertrv/ui/button
 
 - Component · UiButton · selector: `button[uiButton], a[uiButton], button[uiIconButton], a[uiIconButton]` · exportAs: uiButton
@@ -50,6 +112,234 @@
 - Type · UiButtonVariant
   - `type UiButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';`
 
+## @usertrv/ui/checkbox
+
+- Component · UiCheckbox · selector: `ui-checkbox` · exportAs: uiCheckbox
+  - model `checked?: boolean` = `false`
+  - model `indeterminate?: boolean` = `false`
+  - input `disabled?: boolean` = `false`
+  - input `invalid?: boolean` = `false`
+  - input `required?: boolean` = `false`
+  - input `name?: string` = `''`
+  - input `inputId?: string` = `injectId('ui-checkbox')`
+  - input `aria-label?: string | undefined` = `undefined`
+  - input `aria-labelledby?: string | undefined` = `undefined`
+  - input `aria-describedby?: string | undefined` = `undefined`
+  - output `touch: void`
+  - method `focus(options?: FocusOptions): void`
+
+## @usertrv/ui/combobox
+
+- Function · provideUiComboboxIntl
+  - `function provideUiComboboxIntl(labels: Partial<UiComboboxIntl>): Provider`
+- Const · UI_COMBOBOX_INTL
+  - `const UI_COMBOBOX_INTL: InjectionToken<UiComboboxIntl>`
+- Component · UiCombobox · selector: `ui-combobox` · exportAs: uiCombobox
+  - model `value?: T | null` = `null`
+  - input `options?: readonly T[]` = `[]`
+  - input `search?: UiComboboxSearch<T> | null` = `null`
+  - input `debounce?: number` = `300`
+  - input `minQueryLength?: number` = `0`
+  - input `displayWith?: UiComboboxDisplayWith<T>` = `defaultDisplay`
+  - input `filterWith?: UiComboboxFilter<T> | null` = `null`
+  - input `compareWith?: UiCompareWith<T>` = `Object.is`
+  - input `freeText?: boolean` = `false`
+  - input `placeholder?: string` = `''`
+  - input `inputId?: string` = `injectId('ui-combobox-input')`
+  - input `disabled?: boolean` = `false`
+  - input `readonly?: boolean` = `false`
+  - input `invalid?: boolean` = `false`
+  - input `required?: boolean` = `false`
+  - input `name?: string` = `''`
+  - input `aria-label?: string | undefined` = `undefined`
+  - input `aria-labelledby?: string | undefined` = `undefined`
+  - input `aria-describedby?: string | undefined` = `undefined`
+  - output `touch: void`
+  - method `openPanel(): void`
+  - method `close(): void`
+  - method `clear(): void`
+  - method `focus(options?: FocusOptions): void`
+  - property `expanded: import("@angular/core").Signal<boolean>`
+- Type · UiComboboxDisplayWith
+  - `type UiComboboxDisplayWith<T> = (item: T) => string;`
+- Type · UiComboboxFilter
+  - `type UiComboboxFilter<T> = (item: T, query: string) => boolean;`
+- Interface · UiComboboxIntl
+  - `interface UiComboboxIntl { noResults: string; loading: string; error: string; resultsAvailable: (count: number) => string; showSuggestions: string; }`
+- Interface · UiComboboxOptionContext
+  - `interface UiComboboxOptionContext<T> { $implicit: T; query: string; }`
+- Directive · UiComboboxOptionTemplate · selector: `ng-template[uiComboboxOption]`
+- Type · UiComboboxSearch
+  - `type UiComboboxSearch<T> = (query: string, signal: AbortSignal) => Promise<readonly T[]> | Observable<readonly T[]>;`
+- Type · UiComboboxSearchStatus
+  - `type UiComboboxSearchStatus = 'idle' | 'loading' | 'success' | 'error';`
+- Component · UiHighlight · selector: `ui-highlight`
+  - input `text: string`
+  - input `query?: string` = `''`
+
+## @usertrv/ui/datepicker
+
+- Function · formatDate
+  - `function formatDate(date: Date | null, locale: string): string`
+- Function · getFirstDayOfWeek
+  - `function getFirstDayOfWeek(locale: string): UiWeekday`
+- Function · parseDate
+  - `function parseDate(text: string, locale: string): Date | null`
+- Function · provideUiDatepickerIntl
+  - `function provideUiDatepickerIntl(labels: Partial<UiDatepickerIntl>): Provider`
+- Const · UI_DATEPICKER_INTL
+  - `const UI_DATEPICKER_INTL: InjectionToken<UiDatepickerIntl>`
+- Component · UiCalendar · selector: `ui-calendar` · exportAs: uiCalendar
+  - input `selectionMode?: UiCalendarSelectionMode` = `'single'`
+  - model `value?: Date | null` = `null`
+  - model `range?: UiDateRange`
+  - input `min?: Date | null | undefined` = `null`
+  - input `max?: Date | null | undefined` = `null`
+  - input `dateFilter?: UiDateFilter | null` = `null`
+  - input `locale?: string` = `inject(LOCALE_ID)`
+  - input `firstDayOfWeek?: UiWeekday | null | undefined` = `null`
+  - input `startAt?: Date | null` = `null`
+  - output `dateSelected: Date`
+  - output `rangeSelected: UiDateRange`
+  - method `focusActiveCell(): void`
+  - method `isSelectable(date: Date): boolean`
+- Type · UiCalendarSelectionMode
+  - `type UiCalendarSelectionMode = 'single' | 'range';`
+- Type · UiDateFilter
+  - `type UiDateFilter = (date: Date) => boolean;`
+- Component · UiDatepicker · selector: `ui-datepicker` · exportAs: uiDatepicker
+  - model `value?: Date | null` = `null`
+  - input `min?: Date | undefined` = `undefined`
+  - input `max?: Date | undefined` = `undefined`
+  - input `dateFilter?: UiDateFilter | null` = `null`
+  - input `locale?: string` = `inject(LOCALE_ID)`
+  - input `firstDayOfWeek?: UiWeekday | null | undefined` = `null`
+  - input `placeholder?: string | undefined` = `undefined`
+  - input `disabled?: boolean` = `false`
+  - input `readonly?: boolean` = `false`
+  - input `required?: boolean` = `false`
+  - input `invalid?: boolean` = `false`
+  - input `touched?: boolean` = `false`
+  - input `name?: string` = `''`
+  - input `inputId?: string` = `injectId('ui-datepicker-input')`
+  - input `aria-label?: string | null` = `null`
+  - input `aria-labelledby?: string | null` = `null`
+  - input `aria-describedby?: string | null` = `null`
+  - output `touch: void`
+  - method `open(): void`
+  - method `close(): void`
+- Interface · UiDatepickerIntl
+  - `interface UiDatepickerIntl { previousMonth: string; nextMonth: string; previousYear: string; nextYear: string; chooseDate: string; chooseDateRange: string; startDate: string; endDate: string; }`
+- Interface · UiDateRange
+  - `interface UiDateRange { start: Date | null; end: Date | null; }`
+- Component · UiDateRangePicker · selector: `ui-date-range-picker` · exportAs: uiDateRangePicker
+  - model `value?: UiDateRange`
+  - input `minDate?: Date | null | undefined` = `null`
+  - input `maxDate?: Date | null | undefined` = `null`
+  - input `dateFilter?: UiDateFilter | null` = `null`
+  - input `locale?: string` = `inject(LOCALE_ID)`
+  - input `firstDayOfWeek?: UiWeekday | null | undefined` = `null`
+  - input `placeholder?: string | undefined` = `undefined`
+  - input `disabled?: boolean` = `false`
+  - input `readonly?: boolean` = `false`
+  - input `required?: boolean` = `false`
+  - input `invalid?: boolean` = `false`
+  - input `touched?: boolean` = `false`
+  - input `name?: string` = `''`
+  - input `inputId?: string` = `injectId('ui-date-range-picker-input')`
+  - input `aria-label?: string | null` = `null`
+  - input `aria-labelledby?: string | null` = `null`
+  - input `aria-describedby?: string | null` = `null`
+  - output `touch: void`
+  - method `open(): void`
+  - method `close(): void`
+- Type · UiWeekday
+  - `type UiWeekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;`
+
+## @usertrv/ui/dialog
+
+- Const · UI_DIALOG_DATA
+  - `const UI_DIALOG_DATA: InjectionToken<unknown>`
+- Interface · UiConfirmOptions
+  - `interface UiConfirmOptions { title: string; message: string; confirmLabel?: string; cancelLabel?: string; variant?: 'primary' | 'danger'; }`
+- Injectable · UiDialog
+  - method `open<R = unknown, D = unknown, C = unknown>(content: ComponentType<C> | TemplateRef<UiDialogTemplateContext<D, R>>, config?: UiDialogConfig<D>): UiDialogRef<R, C>`
+  - method `confirm(options: UiConfirmOptions): Promise<boolean>`
+  - method `closeAll(): void`
+  - property `openDialogs: Signal<readonly UiDialogRef<unknown, unknown>[]>`
+- Directive · UiDialogActions · selector: `[uiDialogActions]`
+  - input `align?: "start" | "end" | "between"` = `'end'`
+- Directive · UiDialogClose · selector: `button[uiDialogClose]` · exportAs: uiDialogClose
+  - input `uiDialogClose?: unknown` = `undefined`
+  - input `type?: "button" | "submit" | "reset"` = `'button'`
+- Interface · UiDialogConfig
+  - `interface UiDialogConfig<D = unknown> { data?: D; size?: UiDialogSize; role?: UiDialogRole; disableClose?: boolean; hasBackdrop?: boolean; autoFocus?: AutoFocusTarget | string; restoreFocus?: boolean | string | HTMLElement; ariaLabel?: string; ariaLabelledBy?: string; ariaDescribedBy?: string; panelClass?: string | string[]; id?: string; closeOnNavigation?: boolean; viewContainerRef?: ViewContainerRef; injector?: Injector; }`
+- Directive · UiDialogContent · selector: `[uiDialogContent]`
+- Class · UiDialogRef
+  - method `close(result?: R): void`
+  - property `closed: Observable<R | undefined>`
+  - property `result: Promise<R | undefined>`
+  - property `id: string`
+  - property `componentInstance: C | null`
+  - property `disableClose: boolean`
+  - property `keydownEvents: Observable<KeyboardEvent>`
+  - property `backdropClick: Observable<MouseEvent>`
+- Type · UiDialogRole
+  - `type UiDialogRole = 'dialog' | 'alertdialog';`
+- Type · UiDialogSize
+  - `type UiDialogSize = 'sm' | 'md' | 'lg' | 'fullscreen';`
+- Interface · UiDialogTemplateContext
+  - `interface UiDialogTemplateContext<D = unknown, R = unknown> { $implicit: D; dialogRef: UiDialogRef<R>; }`
+- Directive · UiDialogTitle · selector: `[uiDialogTitle]` · exportAs: uiDialogTitle
+  - property `id: string`
+
+## @usertrv/ui/drawer
+
+- Injectable · UiDrawer
+  - method `open<R = unknown, D = unknown, C = unknown>(content: ComponentType<C> | TemplateRef<UiDialogTemplateContext<D, R>>, config?: UiDrawerConfig<D>): UiDialogRef<R, C>`
+- Interface · UiDrawerConfig
+  - `interface UiDrawerConfig<D = unknown> extends Omit<UiDialogConfig<D>, 'size'> { position?: UiDrawerPosition; }`
+- Type · UiDrawerPosition
+  - `type UiDrawerPosition = 'start' | 'end' | 'bottom';`
+
+## @usertrv/ui/form-field
+
+- Function · injectUiControlState
+  - `function injectUiControlState(): UiControlState`
+- Const · UI_FORM_FIELD_CONTROL
+  - `const UI_FORM_FIELD_CONTROL: InjectionToken<UiFormFieldControl>`
+- Type · UiControlSource
+  - `type UiControlSource = 'signal-forms' | 'forms' | null;`
+- Interface · UiControlState
+  - `interface UiControlState { readonly source: Signal<UiControlSource>; readonly invalid: Signal<boolean>; readonly touched: Signal<boolean>; readonly submitted: Signal<boolean>; readonly required: Signal<boolean>; readonly disabled: Signal<boolean>; readonly errorVisible: Signal<boolean>; }`
+- Component · UiError · selector: `ui-error`
+  - input `id?: string` = `injectId('ui-error')`
+- Component · UiFormField · selector: `ui-form-field` · exportAs: uiFormField
+  - input `size?: UiFormFieldSize` = `'md'`
+  - input `invalid?: boolean | undefined` = `undefined`
+  - property `control: import("@angular/core").Signal<import("./input").UiFormFieldControl | undefined>`
+  - property `errorVisible: import("@angular/core").Signal<boolean>`
+  - property `required: import("@angular/core").Signal<boolean>`
+- Interface · UiFormFieldControl
+  - `interface UiFormFieldControl { readonly id: Signal<string>; readonly errorVisible: Signal<boolean>; readonly required: Signal<boolean>; focus(): void; }`
+- Type · UiFormFieldSize
+  - `type UiFormFieldSize = 'sm' | 'md' | 'lg';`
+- Component · UiHint · selector: `ui-hint`
+  - input `id?: string` = `injectId('ui-hint')`
+  - input `align?: "start" | "end"` = `'start'`
+- Directive · UiInput · selector: `input[uiInput], textarea[uiInput]` · exportAs: uiInput
+  - input `id?: string` = `injectId('ui-input')`
+  - input `aria-describedby?: string | undefined` = `undefined`
+  - method `focus(): void`
+  - property `errorVisible: Signal<boolean>`
+  - property `required: Signal<boolean>`
+- Component · UiLabel · selector: `ui-label`
+- Directive · UiPrefix · selector: `[uiPrefix]`
+- Directive · UiSuffix · selector: `[uiSuffix]`
+- Directive · UiTextareaAutosize · selector: `textarea[uiInput][autosize]` · exportAs: uiTextareaAutosize
+  - input `autosize?: boolean` = `true`
+  - method `resize(): void`
+
 ## @usertrv/ui/forms
 
 - Function · provideUiFormValueControl
@@ -59,3 +349,353 @@
 - Directive · UiControlValueAccessor · selector: `ui-checkbox[formControl], ui-checkbox[formControlName], ui-checkbox[ngModel], ui-switch[formControl], ui-switch[formControlName], ui-switch[ngModel], ui-radio-group[formControl], ui-radio-group[formControlName], ui-radio-group[ngModel], ui-select[formControl], ui-select[formControlName], ui-select[ngModel], ui-combobox[formControl], ui-combobox[formControlName], ui-combobox[ngModel], ui-datepicker[formControl], ui-datepicker[formControlName], ui-datepicker[ngModel], ui-date-range-picker[formControl], ui-date-range-picker[formControlName], ui-date-range-picker[ngModel]`
 - Interface · UiFormValueControl
   - `interface UiFormValueControl<T = unknown> { readonly formModel: ModelSignal<T>; readonly touch: OutputEmitterRef<void>; setDisabledState(disabled: boolean): void; }`
+
+## @usertrv/ui/listbox
+
+- Function · createListboxPopup
+  - `function createListboxPopup(injector: Injector, config: UiListboxPopupConfig): UiListboxPopup`
+- Type · UiCompareWith
+  - `type UiCompareWith<T> = (a: T, b: T) => boolean;`
+- Directive · UiListbox · selector: `[uiListbox]` · exportAs: uiListbox
+  - input `id?: string` = `injectId('ui-listbox')`
+  - model `uiListboxSelection?: readonly T[]` = `[]`
+  - input `uiListboxMultiple?: boolean` = `false`
+  - input `uiListboxCompareWith?: UiCompareWith<T>` = `Object.is`
+  - input `uiListboxOptions?: readonly UiOption<T>[] | undefined` = `undefined`
+  - input `uiListboxFocusMode?: UiListboxFocusMode` = `'self'`
+  - input `uiListboxWrap?: boolean` = `false`
+  - input `uiListboxTypeahead?: boolean` = `true`
+  - input `uiListboxSelectionFollowsFocus?: boolean` = `false`
+  - input `uiListboxDisabled?: boolean` = `false`
+  - output `uiListboxPicked: UiOption<T>`
+  - method `isSelected(value: T): boolean`
+  - method `handleKeydown(event: KeyboardEvent): void`
+  - method `isTyping(): boolean`
+  - method `pickOption(option: UiOption<T>): void`
+  - method `pickActive(): boolean`
+  - method `setActiveOption(option: UiOption<T> | null): void`
+  - method `setActiveToSelected(fallback?: "first" | "last" | "none"): void`
+  - method `setFirstActive(): void`
+  - method `setLastActive(): void`
+  - property `options: import("@angular/core").Signal<readonly UiOption<T>[]>`
+  - property `activeOption: import("@angular/core").Signal<UiOption<T> | null>`
+  - property `activeDescendantId: import("@angular/core").Signal<string | null>`
+- Type · UiListboxFocusMode
+  - `type UiListboxFocusMode = 'self' | 'external';`
+- Interface · UiListboxPopup
+  - `interface UiListboxPopup { readonly isOpen: Signal<boolean>; open(): void; close(): void; updatePosition(): void; }`
+- Interface · UiListboxPopupConfig
+  - `interface UiListboxPopupConfig { origin: HTMLElement; panel: HTMLElement; outsideClick?: () => void; panelClass?: string[]; }`
+- Directive · UiOption · selector: `[uiOption]` · exportAs: uiOption
+  - input `uiOption: T`
+  - input `uiOptionDisabled?: boolean` = `false`
+  - input `uiOptionLabel?: string | undefined` = `undefined`
+  - method `getLabel(): string`
+  - property `element: HTMLElement`
+  - property `id: string`
+  - property `isDisabled: import("@angular/core").Signal<boolean>`
+  - property `selected: import("@angular/core").Signal<boolean>`
+  - property `active: import("@angular/core").Signal<boolean>`
+- Directive · UiOptionGroup · selector: `[uiOptionGroup]` · exportAs: uiOptionGroup
+  - input `uiOptionGroupDisabled?: boolean` = `false`
+  - property `labelId: string`
+
+## @usertrv/ui/menu
+
+- Component · UiMenu · selector: `ui-menu, [uiMenu]` · exportAs: uiMenu
+- Directive · UiMenuGroup · selector: `[uiMenuGroup]` · exportAs: uiMenuGroup
+- Component · UiMenuItem · selector: `button[uiMenuItem], a[uiMenuItem]` · exportAs: uiMenuItem
+  - input `destructive?: boolean` = `false`
+- Component · UiMenuItemCheckbox · selector: `button[uiMenuItemCheckbox]` · exportAs: uiMenuItemCheckbox
+  - model `checked?: boolean` = `false`
+- Directive · UiMenuItemIcon · selector: `[uiMenuItemIcon]`
+- Component · UiMenuItemRadio · selector: `button[uiMenuItemRadio]` · exportAs: uiMenuItemRadio
+  - input `checked?: boolean` = `false`
+- Directive · UiMenuItemShortcut · selector: `[uiMenuItemShortcut]`
+- Component · UiMenuSeparator · selector: `ui-menu-separator`
+- Directive · UiMenuTrigger · selector: `[uiMenuTriggerFor]` · exportAs: uiMenuTrigger
+  - method `isOpen(): boolean`
+  - method `open(): void`
+  - method `close(): void`
+  - method `toggle(): void`
+
+## @usertrv/ui/pagination
+
+- Function · paginationRange
+  - `function paginationRange(options: UiPaginationRangeOptions): UiPaginationItem[]`
+- Component · UiPagination · selector: `ui-pagination` · exportAs: uiPagination
+  - model `page?: number` = `1`
+  - model `pageSize?: number` = `20`
+  - input `length: number`
+  - input `pageSizeOptions?: readonly number[]` = `[10, 20, 50, 100]`
+  - input `siblingCount?: number` = `1`
+  - input `boundaryCount?: number` = `1`
+  - input `showSummary?: boolean` = `true`
+  - input `compact?: boolean` = `false`
+  - input `aria-label?: string` = `'Pagination'`
+  - method `goTo(page: number): void`
+  - property `pageCount: import("@angular/core").Signal<number>`
+- Type · UiPaginationItem
+  - `type UiPaginationItem = number | 'start-ellipsis' | 'end-ellipsis';`
+- Interface · UiPaginationRangeOptions
+  - `interface UiPaginationRangeOptions { page: number; pageCount: number; siblingCount?: number; boundaryCount?: number; }`
+
+## @usertrv/ui/popover
+
+- Directive · UiPopover · selector: `[uiPopover]` · exportAs: uiPopover
+  - input `uiPopoverLabel?: string | null` = `null`
+  - input `uiPopoverLabelledBy?: string | null` = `null`
+  - property `panelId: string`
+- Type · UiPopoverAutoFocus
+  - `type UiPopoverAutoFocus = 'first-tabbable' | 'panel' | 'none';`
+- Directive · UiPopoverClose · selector: `button[uiPopoverClose]`
+- Type · UiPopoverCloseReason
+  - `type UiPopoverCloseReason = 'trigger' | 'escape' | 'outside' | 'tab' | 'close' | 'program';`
+- Type · UiPopoverPosition
+  - `type UiPopoverPosition = 'top' | 'bottom' | 'start' | 'end';`
+- Directive · UiPopoverTrigger · selector: `[uiPopoverTrigger]` · exportAs: uiPopoverTrigger
+  - input `uiPopoverTrigger: UiPopover`
+  - input `uiPopoverPosition?: UiPopoverPosition` = `'bottom'`
+  - input `uiPopoverAutoFocus?: UiPopoverAutoFocus` = `'first-tabbable'`
+  - model `uiPopoverOpen?: boolean` = `false`
+  - output `uiPopoverClosed: UiPopoverCloseReason`
+  - method `show(): void`
+  - method `hide(reason?: UiPopoverCloseReason): void`
+  - method `toggle(): void`
+
+## @usertrv/ui/radio
+
+- Component · UiRadioButton · selector: `ui-radio-button`
+  - input `value: T`
+  - input `disabled?: boolean` = `false`
+  - input `inputId?: string` = `injectId('ui-radio')`
+  - input `aria-describedby?: string | undefined` = `undefined`
+  - property `checked: import("@angular/core").Signal<boolean>`
+- Component · UiRadioGroup · selector: `ui-radio-group` · exportAs: uiRadioGroup
+  - model `value?: T | null` = `null`
+  - input `name?: string` = `''`
+  - input `label?: string` = `''`
+  - input `orientation?: "horizontal" | "vertical"` = `'vertical'`
+  - input `disabled?: boolean` = `false`
+  - input `invalid?: boolean` = `false`
+  - input `required?: boolean` = `false`
+  - input `compareWith?: (a: T | null, b: T | null) =` = `Object.is`
+  - input `aria-label?: string | undefined` = `undefined`
+  - input `aria-labelledby?: string | undefined` = `undefined`
+  - input `aria-describedby?: string | undefined` = `undefined`
+  - output `touch: void`
+  - method `focus(options?: FocusOptions): void`
+
+## @usertrv/ui/select
+
+- Component · UiSelect · selector: `ui-select` · exportAs: uiSelect
+  - model `value?: T | readonly T[] | null` = `null`
+  - input `multiple?: boolean` = `false`
+  - input `placeholder?: string` = `''`
+  - input `compareWith?: UiCompareWith<T>` = `Object.is`
+  - input `disabled?: boolean` = `false`
+  - input `readonly?: boolean` = `false`
+  - input `invalid?: boolean` = `false`
+  - input `required?: boolean` = `false`
+  - input `aria-label?: string | undefined` = `undefined`
+  - input `aria-labelledby?: string | undefined` = `undefined`
+  - input `aria-describedby?: string | undefined` = `undefined`
+  - output `touch: void`
+  - output `openedChange: boolean`
+  - method `open(highlight?: "selected" | "first" | "last"): void`
+  - method `close(): void`
+  - method `focus(options?: FocusOptions): void`
+  - property `isOpen: import("@angular/core").Signal<boolean>`
+- Component · UiSelectOption · selector: `ui-option`
+- Component · UiSelectOptionGroup · selector: `ui-optgroup`
+  - input `label: string`
+
+## @usertrv/ui/skeleton
+
+- Directive · UiBusy · selector: `[uiBusy]`
+  - input `uiBusy?: boolean` = `false`
+- Component · UiSkeleton · selector: `ui-skeleton`
+  - input `shape?: UiSkeletonShape` = `'text'`
+  - input `lines?: number` = `1`
+  - input `width?: string | undefined` = `undefined`
+  - input `height?: string | undefined` = `undefined`
+  - input `animated?: boolean` = `true`
+- Type · UiSkeletonShape
+  - `type UiSkeletonShape = 'text' | 'circle' | 'rect';`
+
+## @usertrv/ui/switch
+
+- Component · UiSwitch · selector: `ui-switch` · exportAs: uiSwitch
+  - model `checked?: boolean` = `false`
+  - input `description?: string` = `''`
+  - input `labelPosition?: "before" | "after"` = `'after'`
+  - input `disabled?: boolean` = `false`
+  - input `invalid?: boolean` = `false`
+  - input `required?: boolean` = `false`
+  - input `name?: string` = `''`
+  - input `inputId?: string` = `injectId('ui-switch')`
+  - input `aria-label?: string | undefined` = `undefined`
+  - input `aria-describedby?: string | undefined` = `undefined`
+  - output `touch: void`
+  - method `focus(options?: FocusOptions): void`
+  - method `toggle(): void`
+
+## @usertrv/ui/table
+
+- Function · compareValues
+  - `function compareValues(a: unknown, b: unknown, collator?: Collator): number`
+- Function · createCollator
+  - `function createCollator(locale?: string | undefined): Collator`
+- Function · moveGridPosition
+  - `function moveGridPosition(pos: UiGridPosition, event: Pick<KeyboardEvent, "key" | "ctrlKey" | "metaKey">, bounds: UiGridBounds): UiGridPosition | null`
+- Function · nextSort
+  - `function nextSort(current: UiSort | null, key: string): UiSort | null`
+- Function · sortBy
+  - `function sortBy<T>(items: readonly T[], value: (item: T) => unknown, direction: UiSortDirection, options?: UiSortByOptions<T>): T[]`
+- Interface · UiCellContext
+  - `interface UiCellContext<T> { $implicit: T; row: T; value: unknown; index: number; }`
+- Directive · UiCellDef · selector: `ng-template[uiCell]`
+  - input `uiCellOf?: readonly T[]` = `[]`
+- Component · UiColumn · selector: `ui-column`
+  - input `key: string`
+  - input `header?: string` = `''`
+  - input `sortable?: boolean` = `false`
+  - input `width?: number | undefined` = `undefined`
+  - input `minWidth?: number` = `64`
+  - input `maxWidth?: number` = `1200`
+  - input `resizable?: boolean | undefined` = `undefined`
+  - input `align?: UiColumnAlign` = `'start'`
+  - input `value?: ((row: T) => unknown`
+  - input `compare?: ((a: T, b: T) => number`
+- Type · UiColumnAlign
+  - `type UiColumnAlign = 'start' | 'end';`
+- Directive · UiColumnResize · selector: `[uiColumnResize]` · exportAs: uiColumnResize
+  - input `uiColumnResize: number`
+  - input `uiColumnResizeMin?: number` = `48`
+  - input `uiColumnResizeMax?: number` = `1200`
+  - input `uiColumnResizeStep?: number` = `10`
+  - input `uiColumnResizeLargeStep?: number` = `50`
+  - output `uiColumnResizeChange: number`
+- Type · UiColumnWidths
+  - `type UiColumnWidths = Readonly<Record<string, number>>;`
+- Directive · UiGrid · selector: `[uiGrid]` · exportAs: uiGrid
+  - input `uiGridRowCount: number`
+  - input `uiGridColCount: number`
+  - input `uiGridPageSize?: number` = `10`
+  - output `uiGridRowRequest: number`
+  - method `setActive(pos: UiGridPosition): void`
+  - method `focusCell(pos: UiGridPosition): void`
+  - property `active: import("@angular/core").Signal<UiGridPosition>`
+- Interface · UiGridBounds
+  - `interface UiGridBounds { readonly rows: number; readonly cols: number; readonly pageSize: number; readonly rtl?: boolean; }`
+- Directive · UiGridCell · selector: `[uiGridCell]` · exportAs: uiGridCell
+  - input `uiGridCellRow: number`
+  - input `uiGridCellCol: number`
+  - method `focus(): void`
+  - property `isActive: import("@angular/core").Signal<boolean>`
+- Interface · UiGridPosition
+  - `interface UiGridPosition { readonly row: number; readonly col: number; }`
+- Interface · UiHeaderCellContext
+  - `interface UiHeaderCellContext { $implicit: string; key: string; }`
+- Directive · UiHeaderCellDef · selector: `ng-template[uiHeaderCell]`
+- Type · UiRowKey
+  - `type UiRowKey = string | number;`
+- Type · UiRowKeyAccessor
+  - `type UiRowKeyAccessor<T> = (keyof T & string) | ((row: T) => UiRowKey);`
+- Type · UiSelectionMode
+  - `type UiSelectionMode = 'none' | 'multiple';`
+- Interface · UiSort
+  - `interface UiSort { readonly key: string; readonly direction: UiSortDirection; }`
+- Interface · UiSortByOptions
+  - `interface UiSortByOptions<T> { collator?: Intl.Collator; compare?: (a: T, b: T) => number; }`
+- Type · UiSortDirection
+  - `type UiSortDirection = 'asc' | 'desc';`
+- Type · UiSortMode
+  - `type UiSortMode = 'client' | 'server';`
+- Component · UiTable · selector: `ui-table` · exportAs: uiTable
+  - input `data: readonly T[]`
+  - input `rowKey?: UiRowKeyAccessor<T> | undefined`
+  - input `label?: string | undefined`
+  - input `labelledBy?: string | undefined`
+  - model `sort?: UiSort | null` = `null`
+  - input `sortMode?: UiSortMode` = `'client'`
+  - input `locale?: string | undefined`
+  - input `selectionMode?: UiSelectionMode` = `'none'`
+  - model `selection?: readonly UiRowKey[]` = `[]`
+  - input `resizable?: boolean` = `false`
+  - model `columnWidths?: Readonly<Record<string, number>>`
+  - input `virtual?: boolean` = `false`
+  - input `rowHeight?: number | undefined` = `undefined`
+  - input `stickyHeader?: boolean` = `true`
+  - input `stickyFirstColumn?: boolean` = `false`
+  - input `striped?: boolean` = `false`
+  - input `loading?: boolean` = `false`
+  - input `primaryColumn?: string | undefined`
+  - output `renderedRangeChange: ListRange`
+  - method `scrollToRow(index: number): void`
+- Directive · UiTableEmpty · selector: `ng-template[uiTableEmpty]`
+- Const · UiTableImports
+  - `const UiTableImports: readonly [typeof UiTable, typeof UiColumn, typeof UiCellDef, typeof UiHeaderCellDef, typeof UiTableEmpty]`
+
+## @usertrv/ui/tabs
+
+- Component · UiTab · selector: `ui-tab`
+  - input `label?: string` = `''`
+  - input `disabled?: boolean` = `false`
+- Type · UiTabActivation
+  - `type UiTabActivation = 'automatic' | 'manual';`
+- Directive · UiTabContent · selector: `ng-template[uiTabContent]`
+- Component · UiTabGroup · selector: `ui-tab-group` · exportAs: uiTabGroup
+  - model `selectedIndex?: number` = `0`
+  - input `activation?: UiTabActivation` = `'automatic'`
+  - input `orientation?: UiOrientation` = `'horizontal'`
+  - input `aria-label?: string | undefined` = `undefined`
+  - input `aria-labelledby?: string | undefined` = `undefined`
+  - method `select(index: number): void`
+- Directive · UiTabLabel · selector: `ng-template[uiTabLabel]`
+
+## @usertrv/ui/toast
+
+- Function · provideUiToast
+  - `function provideUiToast(config: Partial<UiToastConfig>): Provider`
+- Const · UI_TOAST_CONFIG
+  - `const UI_TOAST_CONFIG: InjectionToken<UiToastConfig>`
+- Injectable · UiToast
+  - method `show(options: UiToastOptions): UiToastRef`
+  - method `dismiss(id: string): void`
+  - method `dismissAll(): void`
+  - property `visible: Signal<readonly UiToastItem[]>`
+  - property `queued: Signal<number>`
+- Interface · UiToastAction
+  - `interface UiToastAction { label: string; handler: () => void; }`
+- Interface · UiToastConfig
+  - `interface UiToastConfig { position: UiToastPosition; maxVisible: number; duration: number; label: string; focusHotkey: string | null; }`
+- Type · UiToastDismissReason
+  - `type UiToastDismissReason = 'timeout' | 'action' | 'close' | 'program';`
+- Component · UiToaster · selector: `ui-toaster`
+  - input `position?: UiToastPosition | null` = `null`
+- Interface · UiToastItem
+  - `interface UiToastItem { readonly id: string; readonly title?: string; readonly message: string; readonly variant: UiToastVariant; readonly action?: UiToastAction; }`
+- Interface · UiToastOptions
+  - `interface UiToastOptions { title?: string; message: string; variant?: UiToastVariant; duration?: number; action?: UiToastAction; }`
+- Type · UiToastPosition
+  - `type UiToastPosition = 'top-end' | 'bottom-end' | 'bottom-center';`
+- Interface · UiToastRef
+  - `interface UiToastRef { readonly id: string; dismiss(): void; readonly dismissed: Promise<UiToastDismissReason>; }`
+- Type · UiToastVariant
+  - `type UiToastVariant = 'info' | 'success' | 'warning' | 'danger';`
+
+## @usertrv/ui/tooltip
+
+- Directive · UiTooltip · selector: `[uiTooltip]` · exportAs: uiTooltip
+  - input `uiTooltip?: string | null | undefined` = `''`
+  - input `uiTooltipPosition?: UiTooltipPosition` = `'top'`
+  - input `uiTooltipShowDelay?: number` = `300`
+  - input `uiTooltipHideDelay?: number` = `100`
+  - input `uiTooltipDisabled?: boolean` = `false`
+  - method `show(): void`
+  - method `hide(): void`
+  - property `isOpen: Signal<boolean>`
+  - property `tooltipId: string`
+- Type · UiTooltipPosition
+  - `type UiTooltipPosition = 'top' | 'bottom' | 'start' | 'end';`
