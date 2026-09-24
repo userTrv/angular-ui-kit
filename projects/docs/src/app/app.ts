@@ -17,6 +17,7 @@ interface NavGroup {
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  host: { '(document:keydown.escape)': 'closeNav()' },
 })
 export class App {
   protected readonly theme = inject(UiThemeService);
@@ -45,6 +46,14 @@ export class App {
         takeUntilDestroyed(),
       )
       .subscribe(() => this.navOpen.set(false));
+  }
+
+  /** Escape closes the mobile navigation and returns focus to the menu button if it was inside. */
+  protected closeNav(): void {
+    if (!this.navOpen()) return;
+    const hadFocus = document.getElementById('docs-nav')?.contains(document.activeElement);
+    this.navOpen.set(false);
+    if (hadFocus) document.querySelector<HTMLElement>('.topbar__menu')?.focus();
   }
 
   protected setTheme(value: string): void {
