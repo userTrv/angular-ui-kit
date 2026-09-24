@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Injector, afterNextRender, computed, inject, signal, viewChild } from '@angular/core';
 import { UiButton } from '@usertrv/ui/button';
 import { UiRowKey, UiTableImports } from '@usertrv/ui/table';
 
@@ -83,6 +83,9 @@ const DEPLOYMENTS: Deployment[] = [
       >
         Clear selection
       </button>
+      @if (deployments().length < all.length) {
+        <button #restore uiButton size="sm" variant="ghost" (click)="restoreAll()">Restore demo data</button>
+      }
     </div>
 
     <ui-table
@@ -111,6 +114,9 @@ const DEPLOYMENTS: Deployment[] = [
   `,
 })
 export class TableSelectionExample {
+  private readonly injector = inject(Injector);
+  private readonly restoreButton = viewChild('restore', { read: ElementRef<HTMLButtonElement> });
+  protected readonly all = DEPLOYMENTS;
   protected readonly deployments = signal(DEPLOYMENTS);
   protected readonly selection = signal<readonly UiRowKey[]>(['d-9f0a']);
   protected readonly lastAction = signal('Tip: Shift+click a second checkbox to select a range.');
@@ -127,5 +133,12 @@ export class TableSelectionExample {
     this.deployments.update((list) => list.filter((d) => !ids.has(d.id)));
     this.selection.set([]);
     this.lastAction.set(`Rolled back ${services.join(', ')}.`);
+    // The pressed button is now disabled: keep keyboard focus on the toolbar instead of losing it.
+    afterNextRender(() => this.restoreButton()?.nativeElement.focus(), { injector: this.injector });
+  }
+
+  protected restoreAll(): void {
+    this.deployments.set(DEPLOYMENTS);
+    this.lastAction.set('Demo data restored.');
   }
 }
