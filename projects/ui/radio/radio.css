@@ -1,0 +1,110 @@
+.ui-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+  color: var(--ui-color-text);
+  font-size: var(--ui-font-size-control);
+  line-height: var(--ui-font-line-height-normal);
+}
+.ui-radio-group__label {
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-medium);
+}
+.ui-radio-group__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+}
+.ui-radio-group--horizontal .ui-radio-group__options {
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: var(--ui-space-5);
+}
+
+.ui-radio {
+  --_size: var(--ui-checkbox-size);
+  --_border: var(--ui-input-border);
+  --_dot: transparent;
+
+  display: inline-flex;
+}
+.ui-radio__label {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--ui-control-gap);
+  cursor: pointer;
+}
+.ui-radio__control {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  width: var(--_size);
+  height: var(--_size);
+  margin-block: calc((1lh - var(--_size)) / 2);
+}
+.ui-radio__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+.ui-radio__circle {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: var(--ui-border-width) solid var(--_border);
+  border-radius: 50%;
+  background: var(--ui-input-bg);
+  /* The dot is an inset shadow so it scales with the circle and needs no extra element. */
+  box-shadow: inset 0 0 0 calc(var(--_size) * 0.22) var(--ui-input-bg), inset 0 0 0 var(--_size) var(--_dot);
+  pointer-events: none;
+  transition:
+    border-color var(--ui-duration-fast) var(--ui-easing-standard),
+    box-shadow var(--ui-duration-fast) var(--ui-easing-standard);
+}
+.ui-radio__label:hover .ui-radio__input:not(:disabled) + .ui-radio__circle {
+  --_border: var(--ui-input-border-hover);
+}
+.ui-radio--checked {
+  --_border: var(--ui-color-primary);
+  --_dot: var(--ui-color-primary);
+}
+.ui-radio--checked .ui-radio__label:hover .ui-radio__input:not(:disabled) + .ui-radio__circle {
+  --_border: var(--ui-color-primary-hover);
+}
+.ui-radio-group--invalid .ui-radio {
+  --_border: var(--ui-color-danger);
+}
+.ui-radio__input:focus-visible + .ui-radio__circle {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: 2px;
+}
+.ui-radio--disabled .ui-radio__label {
+  cursor: not-allowed;
+  color: var(--ui-color-text-disabled);
+}
+.ui-radio--disabled .ui-radio__circle {
+  opacity: 0.5;
+}
+
+@media (forced-colors: active) {
+  .ui-radio__circle {
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+  .ui-radio--checked .ui-radio__circle {
+    border-color: Highlight;
+    background: radial-gradient(Highlight 0 40%, Canvas 45%);
+    forced-color-adjust: none;
+  }
+  .ui-radio--disabled .ui-radio__circle {
+    border-color: GrayText;
+    opacity: 1;
+  }
+  .ui-radio-group--invalid .ui-radio__circle {
+    border-width: 2px;
+  }
+}

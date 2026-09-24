@@ -1,0 +1,169 @@
+.ui-form-field {
+  --_height: var(--ui-control-height-md);
+  --_border: var(--ui-input-border);
+  --_font-size: var(--ui-font-size-control);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-1-5);
+  min-width: 0;
+  font-size: var(--_font-size);
+  color: var(--ui-color-text);
+}
+.ui-form-field--sm {
+  --_height: var(--ui-control-height-sm);
+  --_font-size: var(--ui-font-size-sm);
+}
+.ui-form-field--lg {
+  --_height: var(--ui-control-height-lg);
+  --_font-size: var(--ui-font-size-lg);
+}
+.ui-form-field--invalid {
+  --_border: var(--ui-color-danger);
+}
+
+/* ---- Label ---- */
+.ui-label {
+  display: block;
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: var(--ui-font-line-height-tight);
+  color: var(--ui-color-text);
+}
+.ui-label__required {
+  margin-inline-start: 0.2em;
+  color: var(--ui-color-danger-text);
+}
+
+/* ---- Box: border, prefix, control, suffix ---- */
+.ui-form-field__control {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-control-gap);
+  box-sizing: border-box;
+  min-height: var(--_height);
+  padding-inline: var(--ui-control-padding-x);
+  border: var(--ui-border-width) solid var(--_border);
+  border-radius: var(--ui-input-radius);
+  background: var(--ui-input-bg);
+  cursor: text;
+  transition:
+    border-color var(--ui-duration-fast) var(--ui-easing-standard),
+    box-shadow var(--ui-duration-fast) var(--ui-easing-standard);
+}
+.ui-form-field__control:hover:not(:has(.ui-input:disabled)) {
+  border-color: var(--ui-input-border-hover);
+}
+.ui-form-field--invalid .ui-form-field__control:hover:not(:has(.ui-input:disabled)) {
+  border-color: var(--ui-color-danger-hover);
+}
+.ui-form-field__control:has(.ui-input:focus-visible) {
+  border-color: var(--ui-input-border-focus);
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: 1px;
+}
+.ui-form-field--invalid .ui-form-field__control:has(.ui-input:focus-visible) {
+  border-color: var(--ui-color-danger);
+}
+.ui-form-field__control:has(.ui-input:disabled) {
+  background: var(--ui-color-surface-sunken);
+  color: var(--ui-color-text-disabled);
+  cursor: not-allowed;
+}
+.ui-form-field__control:has(.ui-input:read-only:not(:disabled)) {
+  background: var(--ui-color-surface-sunken);
+}
+.ui-form-field__control:has(textarea.ui-input) {
+  align-items: flex-start;
+}
+
+.ui-form-field__prefix,
+.ui-form-field__suffix {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--ui-space-1);
+  color: var(--ui-color-text-muted);
+}
+.ui-form-field__prefix svg,
+.ui-form-field__suffix svg {
+  width: 1.1em;
+  height: 1.1em;
+}
+/* Buttons inside the box (clear, show password) sit flush and stay compact. */
+.ui-form-field__suffix .ui-button,
+.ui-form-field__prefix .ui-button {
+  --_height: var(--ui-control-height-sm);
+  --_pad: var(--ui-space-1);
+  margin-inline: calc(var(--ui-space-1) * -1);
+}
+
+/* ---- The native control ---- */
+.ui-input {
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: calc(var(--_height, var(--ui-control-height-md)) - 2 * var(--ui-border-width));
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--_font-size, var(--ui-font-size-control));
+  line-height: var(--ui-font-line-height-normal);
+  outline: none;
+}
+.ui-input::placeholder {
+  color: var(--ui-color-text-muted);
+  opacity: 1;
+}
+.ui-input:disabled {
+  cursor: not-allowed;
+  color: var(--ui-color-text-disabled);
+}
+textarea.ui-input {
+  padding-block: calc((var(--_height, var(--ui-control-height-md)) - 1.5em) / 2 - var(--ui-border-width));
+  resize: vertical;
+}
+textarea.ui-input.cdk-textarea-autosize {
+  resize: none;
+}
+
+/* ---- Hints and errors ---- */
+.ui-form-field__messages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-1);
+  font-size: var(--ui-font-size-xs);
+  line-height: var(--ui-font-line-height-tight);
+}
+.ui-form-field__messages:not(:has(.ui-hint, .ui-error)) {
+  display: none;
+}
+.ui-form-field__errors {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-1);
+}
+.ui-form-field__hints {
+  display: flex;
+  gap: var(--ui-space-2);
+}
+.ui-form-field__hints:empty {
+  display: none;
+}
+@media (forced-colors: active) {
+  .ui-form-field__control {
+    border-color: CanvasText;
+  }
+  .ui-form-field__control:has(.ui-input:disabled) {
+    border-color: GrayText;
+  }
+  /* Colour alone is lost in forced colours: a thicker border marks the invalid state. */
+  .ui-form-field--invalid .ui-form-field__control {
+    border-width: 2px;
+    border-style: double;
+  }
+}

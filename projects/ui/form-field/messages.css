@@ -1,0 +1,25 @@
+/* Hint and error text; also usable outside ui-form-field (e.g. under a checkbox group). */
+.ui-hint,
+.ui-error {
+  font-size: var(--ui-font-size-xs);
+  line-height: var(--ui-font-line-height-tight);
+}
+.ui-hint {
+  color: var(--ui-color-text-muted);
+}
+.ui-hint--end {
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums;
+}
+.ui-error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ui-space-1);
+  color: var(--ui-color-danger-text);
+}
+.ui-error__icon {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  margin-top: 0.05em;
+}
