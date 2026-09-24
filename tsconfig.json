@@ -1,0 +1,37 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "resolveJsonModule": true,
+    "target": "ES2022",
+    "module": "preserve",
+    "paths": {
+      "@usertrv/ui": ["./projects/ui/src/public-api.ts"],
+      "@usertrv/ui/*": ["./projects/ui/*/index.ts"]
+    }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true,
+    "extendedDiagnostics": {
+      "defaultCategory": "error"
+    }
+  },
+  "files": [],
+  "references": [
+    { "path": "./projects/ui/tsconfig.lib.json" },
+    { "path": "./projects/ui/tsconfig.spec.json" },
+    { "path": "./projects/docs/tsconfig.app.json" },
+    { "path": "./projects/docs/tsconfig.spec.json" }
+  ]
+}

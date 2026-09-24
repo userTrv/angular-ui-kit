@@ -1,0 +1,55 @@
+{
+  "name": "angular-ui-kit",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Workspace for @usertrv/ui (Angular UI kit on Angular CDK) and its documentation site.",
+  "license": "MIT",
+  "author": "Kirill Levin",
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=24.15"
+  },
+  "scripts": {
+    "ng": "ng",
+    "gen": "node scripts/build-tokens.mjs && node scripts/gen-docs.mjs",
+    "start": "pnpm gen && ng serve docs",
+    "build": "pnpm gen && pnpm build:lib && pnpm build:docs",
+    "build:lib": "ng build ui",
+    "build:docs": "ng build docs",
+    "test": "pnpm gen && ng test ui --watch=false && ng test docs --watch=false",
+    "test:a11y": "node scripts/a11y-e2e.mjs",
+    "lint": "node scripts/build-tokens.mjs --check && node scripts/gen-docs.mjs --check && ng lint ui && ng lint docs",
+    "changeset": "changeset",
+    "version-packages": "changeset version"
+  },
+  "dependencies": {
+    "@angular/cdk": "22.2.0",
+    "@angular/common": "^22.2.0",
+    "@angular/compiler": "^22.2.0",
+    "@angular/core": "^22.2.0",
+    "@angular/forms": "^22.2.0",
+    "@angular/platform-browser": "^22.2.0",
+    "@angular/router": "^22.2.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular-eslint/builder": "22.5.0",
+    "@angular/build": "^22.2.0",
+    "@angular/cli": "^22.2.0",
+    "@angular/compiler-cli": "^22.2.0",
+    "@changesets/cli": "^3.0.3",
+    "@eslint/js": "^10.0.1",
+    "angular-eslint": "22.5.0",
+    "axe-core": "^4.13.0",
+    "eslint": "^10.9.1",
+    "jsdom": "^30.1.1",
+    "ng-packagr": "^22.2.0",
+    "playwright-core": "^1.63.0",
+    "prettier": "^3.8.1",
+    "shiki": "^4.4.3",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "8.69.0",
+    "vitest": "^5.0.1"
+  }
+}

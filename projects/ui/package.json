@@ -1,0 +1,24 @@
+{
+  "name": "@usertrv/ui",
+  "version": "0.1.0",
+  "description": "Headless-first Angular UI kit on top of Angular CDK: design tokens, accessible components, secondary entry points.",
+  "license": "MIT",
+  "author": "Kirill Levin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/userTrv/angular-ui-kit.git",
+    "directory": "projects/ui"
+  },
+  "homepage": "https://usertrv.dev/projects/angular-ui-kit/",
+  "keywords": ["angular", "ui-kit", "design-system", "cdk", "a11y", "signals"],
+  "peerDependencies": {
+    "@angular/cdk": "^22.2.0",
+    "@angular/common": "^22.2.0",
+    "@angular/core": "^22.2.0",
+    "@angular/forms": "^22.2.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": ["*.css"]
+}
