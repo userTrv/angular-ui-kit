@@ -1,0 +1,77 @@
+.example {
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-xl);
+  background: var(--ui-color-surface);
+  overflow: hidden;
+}
+.example__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--ui-color-border);
+}
+.example__title {
+  margin: 0;
+  font-size: var(--ui-font-size-md);
+  font-weight: 600;
+}
+.example__description {
+  margin: 0.25rem 0 0;
+  color: var(--ui-color-text-muted);
+  font-size: var(--ui-font-size-sm);
+}
+.example__toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.3125rem 0.625rem;
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+  background: transparent;
+  color: var(--ui-color-text-muted);
+  font: inherit;
+  font-size: var(--ui-font-size-sm);
+  cursor: pointer;
+  svg {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  &:hover {
+    color: var(--ui-color-text);
+    background: var(--ui-color-surface-hover);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--ui-color-focus-ring);
+    outline-offset: 1px;
+  }
+}
+.example__preview {
+  padding: 2rem 1.5rem;
+  background:
+    radial-gradient(circle at 1px 1px, var(--docs-dot) 1px, transparent 0) 0 0 / 16px 16px,
+    var(--ui-color-bg);
+  overflow-x: auto;
+}
+.example__code {
+  border-top: 1px solid var(--ui-color-border);
+  ::ng-deep .code-block {
+    border: 0;
+    border-radius: 0;
+  }
+}
+@media (max-width: 600px) {
+  .example__preview {
+    padding: 1.25rem 1rem;
+  }
+  .example__header {
+    flex-direction: column;
+  }
+}

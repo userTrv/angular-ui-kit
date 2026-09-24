@@ -1,0 +1,86 @@
+@if (entry(); as e) {
+  <article class="page">
+    <header class="page__header">
+      <p class="page__eyebrow">{{ e.category }}</p>
+      <h1>{{ e.name }}</h1>
+      <p class="page__lead" [innerHTML]="e.summary | inlineMarkup"></p>
+    </header>
+
+    @if (page.isLoading()) {
+      <p class="page__loading" role="status">Loading examples…</p>
+    } @else if (page.error()) {
+      <p role="alert">This page failed to load. Try reloading.</p>
+    } @else if (page.value(); as p) {
+      @if (importSnippet(); as snippet) {
+        <docs-code-block [code]="snippet.code" [html]="snippet.html" label="Import" />
+      }
+      @if (p.doc.layering) {
+        <aside class="page__callout">
+          <strong>Layering.</strong>&#32;<span [innerHTML]="p.doc.layering | inlineMarkup"></span>
+        </aside>
+      }
+
+      <nav class="page__toc" aria-label="On this page">
+        <a href="#/components/{{ e.slug }}" (click)="$event.preventDefault(); scrollTo('examples')">Examples</a>
+        <a href="#/components/{{ e.slug }}" (click)="$event.preventDefault(); scrollTo('api')">API</a>
+        @if (p.doc.keyboard?.length) {
+          <a href="#/components/{{ e.slug }}" (click)="$event.preventDefault(); scrollTo('keyboard')">Keyboard</a>
+        }
+        <a href="#/components/{{ e.slug }}" (click)="$event.preventDefault(); scrollTo('a11y')">Accessibility</a>
+      </nav>
+
+      <section class="page__section" aria-labelledby="examples">
+        <h2 id="examples" tabindex="-1">Examples</h2>
+        <div class="page__examples">
+          @for (example of p.doc.examples; track example.file) {
+            <docs-example-viewer [example]="example" [sources]="p.sources" />
+          }
+        </div>
+      </section>
+
+      <section class="page__section" aria-labelledby="api">
+        <h2 id="api" tabindex="-1">API</h2>
+        <p class="page__note">Generated from the library source (signal inputs, models, outputs and JSDoc).</p>
+        @for (item of apiItems(); track item.name) {
+          <docs-api-table [item]="item" />
+        }
+      </section>
+
+      @if (p.doc.keyboard?.length) {
+        <section class="page__section" aria-labelledby="keyboard">
+          <h2 id="keyboard" tabindex="-1">Keyboard interaction</h2>
+          <docs-keyboard-table [rows]="p.doc.keyboard!" />
+        </section>
+      }
+
+      <section class="page__section" aria-labelledby="a11y">
+        <h2 id="a11y" tabindex="-1">Accessibility</h2>
+        <ul class="page__a11y">
+          @for (note of p.doc.a11y; track $index) {
+            <li [innerHTML]="note | inlineMarkup"></li>
+          }
+        </ul>
+      </section>
+
+      <nav class="page__pager" aria-label="Previous and next component">
+        @if (neighbours().prev; as prev) {
+          <a [routerLink]="['/components', prev.slug]" class="page__pager-link">
+            <span>Previous</span>{{ prev.name }}
+          </a>
+        } @else {
+          <span></span>
+        }
+        @if (neighbours().next; as next) {
+          <a [routerLink]="['/components', next.slug]" class="page__pager-link page__pager-link--next">
+            <span>Next</span>{{ next.name }}
+          </a>
+        }
+      </nav>
+    }
+  </article>
+} @else {
+  <article class="page">
+    <h1>Component not found</h1>
+    <p>There is no page for “{{ slug() }}”. Pick a component from the navigation.</p>
+  </article>
+}

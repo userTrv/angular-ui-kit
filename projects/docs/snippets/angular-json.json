@@ -1,0 +1,7 @@
+{
+  "styles": [
+    "node_modules/@angular/cdk/overlay-prebuilt.css",
+    "node_modules/@usertrv/ui/styles/ui.css",
+    "src/styles.css"
+  ]
+}

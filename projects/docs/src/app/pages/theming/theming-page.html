@@ -1,0 +1,81 @@
+<header class="page__header">
+  <p class="page__eyebrow">Foundations</p>
+  <h1>Theming &amp; design tokens</h1>
+  <p class="lead">
+    All visual decisions live in <code>projects/ui/tokens/tokens.json</code>. A small build script compiles it to CSS
+    custom properties in three tiers, so themes and densities are just different values for the same variables.
+    Switching is a single attribute change on <code>&lt;html&gt;</code> — no Angular re-render.
+  </p>
+</header>
+
+<section aria-labelledby="tiers-title">
+  <h2 id="tiers-title">Three tiers</h2>
+  <ol class="tiers">
+    <li><strong>Primitive</strong> <code>--ui-color-iris-600</code><span>raw values</span></li>
+    <li><strong>Semantic</strong> <code>--ui-color-primary</code><span>intent, per theme</span></li>
+    <li><strong>Component</strong> <code>--ui-button-radius</code><span>per component</span></li>
+  </ol>
+  <p>References compile to <code>var()</code> chains, so overriding a semantic token re-themes every component using it,
+    and any subtree can opt into another theme:</p>
+  <docs-code-block [code]="snippets['scoped-theme.html'].code" [html]="snippets['scoped-theme.html'].html" label="Scoped theme" />
+</section>
+
+<section aria-labelledby="runtime-title">
+  <h2 id="runtime-title">Runtime switch</h2>
+  <docs-code-block [code]="snippets['theme-switch.ts'].code" [html]="snippets['theme-switch.ts'].html" label="UiThemeService" />
+  <p>To rebrand, override semantic tokens (or one component's tokens) in your own stylesheet:</p>
+  <docs-code-block [code]="snippets['override-tokens.css'].code" [html]="snippets['override-tokens.css'].html" label="Token overrides" />
+</section>
+
+<section aria-labelledby="tokens-title">
+  <h2 id="tokens-title">Token reference</h2>
+  <div class="toolbar">
+    <div class="segmented" role="group" aria-label="Token tier">
+      @for (t of tiers; track t.id) {
+        <button type="button" [attr.aria-pressed]="tier() === t.id" (click)="tier.set(t.id)">
+          {{ t.label }} <span class="count">{{ counts()[t.id] }}</span>
+        </button>
+      }
+    </div>
+    <label class="search">
+      <span class="ui-sr-only">Filter tokens</span>
+      <input type="search" placeholder="Filter, e.g. primary" [value]="query()" (input)="query.set($any($event.target).value)" />
+    </label>
+  </div>
+  <p class="hint">{{ activeHint() }}</p>
+  <div class="table-wrap" tabindex="0" role="region" aria-label="Design tokens">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Token</th>
+          @for (c of columns(); track c) {
+            <th scope="col">{{ c === 'value' ? 'Value' : c }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows(); track row.cssVar) {
+          <tr>
+            <td><code>{{ row.cssVar }}</code></td>
+            @for (c of columns(); track c) {
+              <td>
+                <span class="value">
+                  @if (row.isColor) {
+                    @if (tier() === 'semantic') {
+                      <span class="swatch" [attr.data-ui-theme]="c" [style.background]="'var(' + row.cssVar + ')'" aria-hidden="true"></span>
+                    } @else {
+                      <span class="swatch" [style.background]="'var(' + row.cssVar + ')'" aria-hidden="true"></span>
+                    }
+                  }
+                  <span>{{ display(row.values[c]) }}</span>
+                </span>
+              </td>
+            }
+          </tr>
+        } @empty {
+          <tr><td [attr.colspan]="columns().length + 1">No tokens match “{{ query() }}”.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,0 +1,11 @@
+/* Brand override: change semantic tokens, every component follows. */
+:root {
+  --ui-color-primary: #0f766e;
+  --ui-color-primary-hover: #115e59;
+  --ui-color-primary-text: #0f766e;
+  --ui-color-primary-subtle: #f0fdfa;
+}
+/* Or tune a single component through its component-tier token. */
+:root {
+  --ui-button-radius: 999px;
+}
