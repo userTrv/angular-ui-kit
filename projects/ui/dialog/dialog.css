@@ -1,0 +1,127 @@
+/* Overlay pane: sizing. The surface (.ui-dialog) fills it. */
+.ui-dialog-pane {
+  --_width: 32rem;
+  --_gutter: var(--ui-space-4);
+
+  width: min(var(--_width), calc(100vw - 2 * var(--_gutter)));
+  max-height: calc(100dvh - 2 * var(--ui-space-8));
+}
+.ui-dialog-pane--sm {
+  --_width: 24rem;
+}
+.ui-dialog-pane--lg {
+  --_width: 48rem;
+}
+.ui-dialog-pane--fullscreen {
+  width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+}
+@media (max-width: 40rem) {
+  .ui-dialog-pane--lg {
+    width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+}
+
+/* Surface */
+.ui-dialog {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  max-height: inherit;
+  overflow: hidden;
+  border: var(--ui-border-width) solid var(--ui-color-border);
+  border-radius: var(--ui-dialog-radius);
+  background: var(--ui-overlay-bg);
+  box-shadow: var(--ui-overlay-shadow);
+  color: var(--ui-color-text);
+  outline: none;
+  animation: ui-dialog-enter var(--ui-duration-normal) var(--ui-easing-standard);
+}
+.ui-dialog:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: 2px;
+}
+.ui-dialog-pane--fullscreen .ui-dialog {
+  height: 100%;
+  border-radius: 0;
+}
+@media (max-width: 40rem) {
+  .ui-dialog-pane--lg .ui-dialog {
+    height: 100%;
+    border-radius: 0;
+  }
+}
+
+/*
+ * The content component's host (and any wrapper such as a <form>) sits between the surface and the
+ * parts; pass the column layout through it so only uiDialogContent scrolls.
+ */
+.ui-dialog > :not(.ui-dialog__title, .ui-dialog__content, .ui-dialog__actions),
+.ui-dialog :has(> .ui-dialog__content) {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Parts */
+.ui-dialog__title {
+  flex: none;
+  margin: 0;
+  padding: var(--ui-dialog-padding) var(--ui-dialog-padding) var(--ui-space-2);
+  font-size: var(--ui-font-size-lg);
+  font-weight: var(--ui-font-weight-semibold);
+  line-height: var(--ui-font-line-height-tight);
+}
+.ui-dialog__content {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: var(--ui-space-2) var(--ui-dialog-padding);
+  overflow: auto;
+  align-content: start;
+  line-height: var(--ui-font-line-height-normal);
+  overscroll-behavior: contain;
+}
+.ui-dialog__content > :first-child {
+  margin-top: 0;
+}
+.ui-dialog__content > :last-child {
+  margin-bottom: 0;
+}
+.ui-dialog__content:first-child {
+  padding-top: var(--ui-dialog-padding);
+}
+.ui-dialog__content:last-child {
+  padding-bottom: var(--ui-dialog-padding);
+}
+.ui-dialog__content:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: calc(-1 * var(--ui-focus-ring-width));
+}
+.ui-dialog__actions {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ui-space-2);
+  padding: var(--ui-space-4) var(--ui-dialog-padding) var(--ui-dialog-padding);
+}
+.ui-dialog__actions--start {
+  justify-content: flex-start;
+}
+.ui-dialog__actions--between {
+  justify-content: space-between;
+}
+
+@keyframes ui-dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+  }
+}

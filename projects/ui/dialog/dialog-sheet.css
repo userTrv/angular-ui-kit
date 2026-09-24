@@ -1,0 +1,57 @@
+/*
+ * Side and bottom sheets opened by UiDrawer (@usertrv/ui/drawer). They reuse the dialog surface and
+ * parts; only the pane geometry and the entry animation differ, so the rules live next to the dialog.
+ */
+.ui-drawer-pane {
+  height: 100dvh;
+  max-height: 100dvh;
+  width: min(var(--ui-drawer-width), calc(100vw - var(--ui-space-12)));
+}
+.ui-drawer-pane .ui-dialog {
+  height: 100%;
+  border-radius: 0;
+  border-block: 0;
+  animation: ui-sheet-from-end var(--ui-duration-slow) var(--ui-easing-standard);
+}
+.ui-drawer-pane--end .ui-dialog {
+  border-inline-end: 0;
+}
+.ui-drawer-pane--start .ui-dialog {
+  border-inline-start: 0;
+  animation-name: ui-sheet-from-start;
+}
+[dir='rtl'] .ui-drawer-pane--end .ui-dialog {
+  animation-name: ui-sheet-from-start;
+}
+[dir='rtl'] .ui-drawer-pane--start .ui-dialog {
+  animation-name: ui-sheet-from-end;
+}
+
+.ui-drawer-pane--bottom {
+  width: min(100vw, 40rem);
+  height: auto;
+  max-height: 85dvh;
+}
+.ui-drawer-pane--bottom .ui-dialog {
+  height: auto;
+  border: var(--ui-border-width) solid var(--ui-color-border);
+  border-bottom: 0;
+  border-radius: var(--ui-dialog-radius) var(--ui-dialog-radius) 0 0;
+  animation-name: ui-sheet-from-bottom;
+}
+
+@keyframes ui-sheet-from-end {
+  from {
+    transform: translateX(100%);
+  }
+}
+@keyframes ui-sheet-from-start {
+  from {
+    transform: translateX(-100%);
+  }
+}
+@keyframes ui-sheet-from-bottom {
+  from {
+    transform: translateY(100%);
+  }
+}
