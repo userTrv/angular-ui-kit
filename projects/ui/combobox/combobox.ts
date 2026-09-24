@@ -24,8 +24,8 @@ import {
 } from '@angular/core';
 import { FormValueControl } from '@angular/forms/signals';
 import { injectId } from '@usertrv/ui/a11y';
-import { injectUiControlState } from '@usertrv/ui/form-field';
-import { UiFormValueControl, provideUiFormValueControl } from '@usertrv/ui/forms';
+import { UI_FORM_FIELD_CONTEXT, UiFormFieldControl, provideUiFormFieldControl } from '@usertrv/ui/form-field';
+import { UiFormValueControl, injectUiControlState, provideUiFormValueControl } from '@usertrv/ui/forms';
 import { UiCompareWith, UiListbox, UiOption, createListboxPopup } from '@usertrv/ui/listbox';
 import { UiSelectOption } from '@usertrv/ui/select';
 import { UI_COMBOBOX_INTL } from './combobox-intl';
@@ -48,7 +48,7 @@ const defaultDisplay = (item: unknown): string => (item === null || item === und
   selector: 'ui-combobox',
   exportAs: 'uiCombobox',
   imports: [UiListbox, UiSelectOption, UiHighlight, NgTemplateOutlet],
-  providers: [provideUiFormValueControl(UiCombobox)],
+  providers: [provideUiFormValueControl(UiCombobox), provideUiFormFieldControl(UiCombobox)],
   templateUrl: './combobox.html',
   styleUrl: './combobox.css',
   encapsulation: ViewEncapsulation.None,
@@ -76,6 +76,7 @@ export class UiCombobox<T = unknown> implements FormValueControl<T | null>, UiFo
   private popup?: ReturnType<typeof createListboxPopup>;
   private readonly formDisabled = signal(false);
   private readonly state = injectUiControlState();
+  private readonly formField = inject(UI_FORM_FIELD_CONTEXT, { optional: true });
 
   /** The selected item (or the typed text with `freeText`). */
   readonly value = model<T | null>(null);
@@ -137,9 +138,21 @@ export class UiCombobox<T = unknown> implements FormValueControl<T | null>, UiFo
   protected readonly isDisabled = computed(() => this.disabled() || this.formDisabled());
   protected readonly isRequired = computed(() => this.required() || this.state.required());
   // Signal Forms binds the raw `invalid`: like the other kit fields, show it after interaction.
-  protected readonly showInvalid = computed(() =>
-    this.state.source() === 'signal-forms' ? this.state.errorVisible() : this.invalid() || this.state.errorVisible(),
+  protected readonly showInvalid = computed(
+    () =>
+      this.formField?.invalidOverride() ??
+      (this.state.source() === 'signal-forms' ? this.state.errorVisible() : this.invalid() || this.state.errorVisible()),
   );
+  protected readonly describedBy = computed(
+    () => [this.ariaDescribedby(), this.formField?.describedBy()].filter(Boolean).join(' ') || null,
+  );
+  /** @internal Contract for an enclosing `ui-form-field`. */
+  readonly formFieldControl: UiFormFieldControl = {
+    id: this.inputId,
+    errorVisible: this.showInvalid,
+    required: this.isRequired,
+    focus: () => this.focus(),
+  };
   private readonly suggestions = createComboboxSuggestions<T>(inject(DestroyRef), {
     query: this.query,
     options: this.options,

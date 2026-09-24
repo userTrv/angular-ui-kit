@@ -13,8 +13,7 @@ import {
 } from '@angular/core';
 import { FormValueControl } from '@angular/forms/signals';
 import { injectId } from '@usertrv/ui/a11y';
-import { injectUiControlState } from '@usertrv/ui/form-field';
-import { UiFormValueControl, provideUiFormValueControl } from '@usertrv/ui/forms';
+import { UiFormValueControl, injectUiControlState, provideUiFormValueControl } from '@usertrv/ui/forms';
 
 /**
  * Single choice from a short list of options, rendered as native radio buttons.

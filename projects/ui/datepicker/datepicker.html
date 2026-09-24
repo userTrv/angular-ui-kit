@@ -1,5 +1,6 @@
 <div #field class="ui-datepicker__field">
   <input
+    #input
     class="ui-datepicker__input"
     type="text"
     autocomplete="off"
@@ -8,11 +9,11 @@
     [placeholder]="placeholderText()"
     [disabled]="isDisabled()"
     [readOnly]="readonly()"
-    [required]="required()"
+    [required]="isRequired()"
     [attr.name]="name() || null"
     [attr.aria-label]="ariaLabel()"
     [attr.aria-labelledby]="ariaLabelledby()"
-    [attr.aria-describedby]="ariaDescribedby()"
+    [attr.aria-describedby]="describedBy()"
     [attr.aria-invalid]="showInvalid() || null"
     (input)="onInput($event)"
     (blur)="onBlur()"

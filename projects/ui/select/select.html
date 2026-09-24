@@ -1,6 +1,7 @@
 <div
   #trigger
   class="ui-select__trigger"
+  [id]="triggerId"
   role="combobox"
   aria-haspopup="listbox"
   [attr.tabindex]="isDisabled() ? -1 : 0"
@@ -8,8 +9,8 @@
   [attr.aria-expanded]="isOpen()"
   [attr.aria-activedescendant]="isOpen() ? listboxRef().activeDescendantId() : null"
   [attr.aria-label]="ariaLabel()"
-  [attr.aria-labelledby]="ariaLabelledby()"
-  [attr.aria-describedby]="ariaDescribedby()"
+  [attr.aria-labelledby]="labelledBy()"
+  [attr.aria-describedby]="describedBy()"
   [attr.aria-disabled]="isDisabled() || null"
   [attr.aria-readonly]="readonly() || null"
   [attr.aria-invalid]="showInvalid() || null"
@@ -35,7 +36,7 @@
       uiListboxFocusMode="external"
       [id]="listboxId"
       [attr.aria-label]="ariaLabel()"
-      [attr.aria-labelledby]="ariaLabelledby()"
+      [attr.aria-labelledby]="labelledBy()"
       [uiListboxOptions]="options()"
       [uiListboxMultiple]="multiple()"
       [uiListboxCompareWith]="compareWith()"

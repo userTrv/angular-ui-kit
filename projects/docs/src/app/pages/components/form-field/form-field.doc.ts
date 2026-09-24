@@ -1,5 +1,6 @@
 import { defineDoc } from '../../../core/doc-model';
 import { FormFieldAnatomyExample } from './examples/form-field-anatomy.example';
+import { FormFieldKitControlsExample } from './examples/form-field-kit-controls.example';
 import { FormFieldReactiveFormsExample } from './examples/form-field-reactive-forms.example';
 import { FormFieldSignalFormsExample } from './examples/form-field-signal-forms.example';
 import { FormFieldTextareaExample } from './examples/form-field-textarea.example';
@@ -10,9 +11,9 @@ export const doc = defineDoc({
   category: 'Forms',
   summary: 'Native inputs and textareas with label, hint, error, prefix and suffix, wired for Signal Forms and Reactive Forms.',
   entryPoint: '@usertrv/ui/form-field',
-  api: ['UiFormField', 'UiInput', 'UiTextareaAutosize', 'UiLabel', 'UiHint', 'UiError', 'UiPrefix', 'UiSuffix', 'injectUiControlState'],
+  api: ['UiFormField', 'UiInput', 'UiTextareaAutosize', 'UiLabel', 'UiHint', 'UiError', 'UiPrefix', 'UiSuffix', 'provideUiFormFieldControl', 'injectUiControlState'],
   layering:
-    '`input[uiInput]` is a directive on the native element (value, `type`, autocomplete and IME stay native). `ui-form-field` only does layout and ARIA wiring: it finds the control through the `UI_FORM_FIELD_CONTROL` token, so other kit controls can sit in a field too. Form state is read by `injectUiControlState()`, a headless helper shared with checkbox, radio group and switch: it reads the Signal Forms `FormField` state directly, or turns `NgControl.control.events` into signals for Reactive and template-driven forms.',
+    '`input[uiInput]` is a directive on the native element (value, `type`, autocomplete and IME stay native). `ui-form-field` only does layout and ARIA wiring: it finds the control through the `UI_FORM_FIELD_CONTROL` token, so `ui-select`, `ui-combobox` and `ui-datepicker` sit in a field too (they register with `provideUiFormFieldControl()`, draw their own box and take the label, hints and errors from the field). Form state is read by `injectUiControlState()` from `@usertrv/ui/forms`, a headless helper shared by every kit control: it reads the Signal Forms `FormField` state directly, or turns `NgControl.control.events` into signals for Reactive and template-driven forms.',
   examples: [
     {
       title: 'Anatomy',
@@ -31,6 +32,12 @@ export const doc = defineDoc({
       component: FormFieldSignalFormsExample,
       file: 'form-field-signal-forms.example.ts',
       description: 'Errors appear after a field is left or once `submit()` marks the form as touched; on an invalid submit focus moves to the first invalid control with `focusBoundControl()`. Every kit control binds with plain `[formField]`, no adapter.',
+    },
+    {
+      title: 'Select, combobox and datepicker in a field',
+      component: FormFieldKitControlsExample,
+      file: 'form-field-kit-controls.example.ts',
+      description: 'The same `ui-label`, `ui-hint` and `ui-error` work around the other kit controls. The select trigger is not a labelable element, so it is named with `aria-labelledby` and a click on the label focuses it. Press **Book** with empty fields to see the errors.',
     },
     {
       title: 'Reactive Forms',

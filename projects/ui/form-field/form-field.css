@@ -76,6 +76,18 @@
 .ui-form-field__control:has(textarea.ui-input) {
   align-items: flex-start;
 }
+/* Kit controls with their own box (select, combobox, datepicker): the field adds no second border. */
+.ui-form-field--bare .ui-form-field__control {
+  display: block;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: auto;
+}
+.ui-form-field--bare .ui-form-field__control > * {
+  width: 100%;
+}
 
 .ui-form-field__prefix,
 .ui-form-field__suffix {
@@ -165,5 +177,8 @@ textarea.ui-input.cdk-textarea-autosize {
   .ui-form-field--invalid .ui-form-field__control {
     border-width: 2px;
     border-style: double;
+  }
+  .ui-form-field.ui-form-field--bare .ui-form-field__control {
+    border: 0;
   }
 }

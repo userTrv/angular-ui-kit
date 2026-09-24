@@ -13,8 +13,7 @@ import {
 } from '@angular/core';
 import { FormCheckboxControl } from '@angular/forms/signals';
 import { injectId } from '@usertrv/ui/a11y';
-import { injectUiControlState } from '@usertrv/ui/form-field';
-import { UiFormValueControl, provideUiFormValueControl } from '@usertrv/ui/forms';
+import { UiFormValueControl, injectUiControlState, provideUiFormValueControl } from '@usertrv/ui/forms';
 
 /**
  * On/off switch for settings that apply immediately. Built on `<input type="checkbox" role="switch">`:

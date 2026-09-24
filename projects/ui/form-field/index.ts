@@ -11,6 +11,8 @@ export {
   UiInput,
   UiTextareaAutosize,
   UI_FORM_FIELD_CONTROL,
+  UI_FORM_FIELD_CONTEXT,
+  provideUiFormFieldControl,
   type UiFormFieldControl,
+  type UiFormFieldContext,
 } from './input';
-export { injectUiControlState, type UiControlState, type UiControlSource } from './control-state';

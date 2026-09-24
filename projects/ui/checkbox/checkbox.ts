@@ -13,8 +13,7 @@ import {
 } from '@angular/core';
 import { FormCheckboxControl } from '@angular/forms/signals';
 import { injectId } from '@usertrv/ui/a11y';
-import { injectUiControlState } from '@usertrv/ui/form-field';
-import { UiFormValueControl, provideUiFormValueControl } from '@usertrv/ui/forms';
+import { UiFormValueControl, injectUiControlState, provideUiFormValueControl } from '@usertrv/ui/forms';
 
 /**
  * Checkbox with a custom visual on top of a real `<input type="checkbox">`, so the role, the

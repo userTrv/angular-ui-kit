@@ -16,8 +16,8 @@ import {
 } from '@angular/core';
 import { FormValueControl } from '@angular/forms/signals';
 import { injectId } from '@usertrv/ui/a11y';
-import { injectUiControlState } from '@usertrv/ui/form-field';
-import { UiFormValueControl, provideUiFormValueControl } from '@usertrv/ui/forms';
+import { UI_FORM_FIELD_CONTEXT, UiFormFieldControl, provideUiFormFieldControl } from '@usertrv/ui/form-field';
+import { UiFormValueControl, injectUiControlState, provideUiFormValueControl } from '@usertrv/ui/forms';
 import { UiCompareWith, UiListbox, UiOption, createListboxPopup } from '@usertrv/ui/listbox';
 
 /**
@@ -27,12 +27,13 @@ import { UiCompareWith, UiListbox, UiOption, createListboxPopup } from '@usertrv
  *
  * `value` holds one option value, or an array of them with `multiple`. Works with Signal Forms
  * (`[formField]`) natively and with Reactive Forms / `ngModel` through `UiControlValueAccessor`.
+ * Inside a `ui-form-field` it takes its label, hints and errors from the field.
  */
 @Component({
   selector: 'ui-select',
   exportAs: 'uiSelect',
   imports: [UiListbox],
-  providers: [provideUiFormValueControl(UiSelect)],
+  providers: [provideUiFormValueControl(UiSelect), provideUiFormFieldControl(UiSelect)],
   templateUrl: './select.html',
   styleUrl: './select.css',
   encapsulation: ViewEncapsulation.None,
@@ -57,6 +58,8 @@ export class UiSelect<T = unknown> implements FormValueControl<T | readonly T[] 
   protected readonly listboxId = injectId('ui-select-listbox');
   private readonly formDisabled = signal(false);
   private readonly state = injectUiControlState();
+  private readonly formField = inject(UI_FORM_FIELD_CONTEXT, { optional: true });
+  protected readonly triggerId = injectId('ui-select-trigger');
   private popup?: ReturnType<typeof createListboxPopup>;
 
   /** Selected option value; an array of values when `multiple`. `null` when nothing is selected. */
@@ -100,9 +103,25 @@ export class UiSelect<T = unknown> implements FormValueControl<T | readonly T[] 
   protected readonly isDisabled = computed(() => this.disabled() || this.formDisabled());
   protected readonly isRequired = computed(() => this.required() || this.state.required());
   // Signal Forms binds the raw `invalid`: like the other kit fields, show it after interaction.
-  protected readonly showInvalid = computed(() =>
-    this.state.source() === 'signal-forms' ? this.state.errorVisible() : this.invalid() || this.state.errorVisible(),
+  protected readonly showInvalid = computed(
+    () =>
+      this.formField?.invalidOverride() ??
+      (this.state.source() === 'signal-forms' ? this.state.errorVisible() : this.invalid() || this.state.errorVisible()),
   );
+  /** Own `aria-labelledby`, else the enclosing field's label (a `<label for>` cannot name a div). */
+  protected readonly labelledBy = computed(
+    () => this.ariaLabelledby() ?? (this.ariaLabel() ? null : (this.formField?.labelId() ?? null)),
+  );
+  protected readonly describedBy = computed(
+    () => [this.ariaDescribedby(), this.formField?.describedBy()].filter(Boolean).join(' ') || null,
+  );
+  /** @internal Contract for an enclosing `ui-form-field`. */
+  readonly formFieldControl: UiFormFieldControl = {
+    id: signal(this.triggerId).asReadonly(),
+    errorVisible: this.showInvalid,
+    required: this.isRequired,
+    focus: () => this.focus(),
+  };
   protected readonly selection = computed<readonly T[]>(() => {
     const value = this.value();
     if (this.multiple()) return Array.isArray(value) ? (value as readonly T[]) : [];

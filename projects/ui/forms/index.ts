@@ -4,3 +4,4 @@ export {
   provideUiFormValueControl,
   type UiFormValueControl,
 } from './value-accessor';
+export { injectUiControlState, type UiControlState, type UiControlSource } from './control-state';

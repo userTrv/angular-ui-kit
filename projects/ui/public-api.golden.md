@@ -227,6 +227,7 @@
   - input `aria-describedby?: string | null` = `null`
   - output `touch: void`
   - method `open(): void`
+  - method `focus(options?: FocusOptions): void`
   - method `close(): void`
 - Interface · UiDatepickerIntl
   - `interface UiDatepickerIntl { previousMonth: string; nextMonth: string; previousYear: string; nextYear: string; chooseDate: string; chooseDateRange: string; startDate: string; endDate: string; }`
@@ -304,14 +305,12 @@
 
 ## @usertrv/ui/form-field
 
-- Function · injectUiControlState
-  - `function injectUiControlState(): UiControlState`
+- Function · provideUiFormFieldControl
+  - `function provideUiFormFieldControl(component: Type<{ readonly formFieldControl: UiFormFieldControl; }>): Provider`
+- Const · UI_FORM_FIELD_CONTEXT
+  - `const UI_FORM_FIELD_CONTEXT: InjectionToken<UiFormFieldContext>`
 - Const · UI_FORM_FIELD_CONTROL
   - `const UI_FORM_FIELD_CONTROL: InjectionToken<UiFormFieldControl>`
-- Type · UiControlSource
-  - `type UiControlSource = 'signal-forms' | 'forms' | null;`
-- Interface · UiControlState
-  - `interface UiControlState { readonly source: Signal<UiControlSource>; readonly invalid: Signal<boolean>; readonly touched: Signal<boolean>; readonly submitted: Signal<boolean>; readonly required: Signal<boolean>; readonly disabled: Signal<boolean>; readonly errorVisible: Signal<boolean>; }`
 - Component · UiError · selector: `ui-error`
   - input `id?: string` = `injectId('ui-error')`
 - Component · UiFormField · selector: `ui-form-field` · exportAs: uiFormField
@@ -320,6 +319,8 @@
   - property `control: import("@angular/core").Signal<import("./input").UiFormFieldControl | undefined>`
   - property `errorVisible: import("@angular/core").Signal<boolean>`
   - property `required: import("@angular/core").Signal<boolean>`
+- Interface · UiFormFieldContext
+  - `interface UiFormFieldContext { readonly describedBy: Signal<string | null>; readonly invalidOverride: Signal<boolean | undefined>; readonly labelId: Signal<string | null>; }`
 - Interface · UiFormFieldControl
   - `interface UiFormFieldControl { readonly id: Signal<string>; readonly errorVisible: Signal<boolean>; readonly required: Signal<boolean>; focus(): void; }`
 - Type · UiFormFieldSize
@@ -334,18 +335,27 @@
   - property `errorVisible: Signal<boolean>`
   - property `required: Signal<boolean>`
 - Component · UiLabel · selector: `ui-label`
+  - property `id: string`
 - Directive · UiPrefix · selector: `[uiPrefix]`
 - Directive · UiSuffix · selector: `[uiSuffix]`
 - Directive · UiTextareaAutosize · selector: `textarea[uiInput][autosize]` · exportAs: uiTextareaAutosize
   - input `autosize?: boolean` = `true`
+  - input `minRows?: number`
+  - input `maxRows?: number`
   - method `resize(): void`
 
 ## @usertrv/ui/forms
 
+- Function · injectUiControlState
+  - `function injectUiControlState(): UiControlState`
 - Function · provideUiFormValueControl
   - `function provideUiFormValueControl(component: Type<unknown>): Provider`
 - Const · UI_FORM_VALUE_CONTROL
   - `const UI_FORM_VALUE_CONTROL: InjectionToken<UiFormValueControl<unknown>>`
+- Type · UiControlSource
+  - `type UiControlSource = 'signal-forms' | 'forms' | null;`
+- Interface · UiControlState
+  - `interface UiControlState { readonly source: Signal<UiControlSource>; readonly invalid: Signal<boolean>; readonly touched: Signal<boolean>; readonly submitted: Signal<boolean>; readonly required: Signal<boolean>; readonly disabled: Signal<boolean>; readonly errorVisible: Signal<boolean>; }`
 - Directive · UiControlValueAccessor · selector: `ui-checkbox[formControl], ui-checkbox[formControlName], ui-checkbox[ngModel], ui-switch[formControl], ui-switch[formControlName], ui-switch[ngModel], ui-radio-group[formControl], ui-radio-group[formControlName], ui-radio-group[ngModel], ui-select[formControl], ui-select[formControlName], ui-select[ngModel], ui-combobox[formControl], ui-combobox[formControlName], ui-combobox[ngModel], ui-datepicker[formControl], ui-datepicker[formControlName], ui-datepicker[ngModel], ui-date-range-picker[formControl], ui-date-range-picker[formControlName], ui-date-range-picker[ngModel]`
 - Interface · UiFormValueControl
   - `interface UiFormValueControl<T = unknown> { readonly formModel: ModelSignal<T>; readonly touch: OutputEmitterRef<void>; setDisabledState(disabled: boolean): void; }`
@@ -403,17 +413,32 @@
 ## @usertrv/ui/menu
 
 - Component · UiMenu · selector: `ui-menu, [uiMenu]` · exportAs: uiMenu
+  - output `closed: void`
 - Directive · UiMenuGroup · selector: `[uiMenuGroup]` · exportAs: uiMenuGroup
 - Component · UiMenuItem · selector: `button[uiMenuItem], a[uiMenuItem]` · exportAs: uiMenuItem
   - input `destructive?: boolean` = `false`
+  - input `disabled?: boolean`
+  - input `typeaheadLabel?: string | null`
+  - output `triggered: void`
 - Component · UiMenuItemCheckbox · selector: `button[uiMenuItemCheckbox]` · exportAs: uiMenuItemCheckbox
   - model `checked?: boolean` = `false`
+  - input `disabled?: boolean`
+  - input `typeaheadLabel?: string | null`
+  - output `triggered: void`
 - Directive · UiMenuItemIcon · selector: `[uiMenuItemIcon]`
 - Component · UiMenuItemRadio · selector: `button[uiMenuItemRadio]` · exportAs: uiMenuItemRadio
   - input `checked?: boolean` = `false`
+  - input `disabled?: boolean`
+  - input `typeaheadLabel?: string | null`
+  - output `triggered: void`
 - Directive · UiMenuItemShortcut · selector: `[uiMenuItemShortcut]`
 - Component · UiMenuSeparator · selector: `ui-menu-separator`
 - Directive · UiMenuTrigger · selector: `[uiMenuTriggerFor]` · exportAs: uiMenuTrigger
+  - input `uiMenuTriggerFor?: TemplateRef<unknown> | null`
+  - input `uiMenuPosition?: ConnectedPosition[]`
+  - input `uiMenuTriggerData?: unknown`
+  - output `uiMenuOpened: void`
+  - output `uiMenuClosed: void`
   - method `isOpen(): boolean`
   - method `open(): void`
   - method `close(): void`
@@ -479,7 +504,7 @@
   - input `disabled?: boolean` = `false`
   - input `invalid?: boolean` = `false`
   - input `required?: boolean` = `false`
-  - input `compareWith?: (a: T | null, b: T | null) =` = `Object.is`
+  - input `compareWith?: (a: T | null, b: T | null) => boolean` = `Object.is`
   - input `aria-label?: string | undefined` = `undefined`
   - input `aria-labelledby?: string | undefined` = `undefined`
   - input `aria-describedby?: string | undefined` = `undefined`
@@ -507,8 +532,12 @@
   - method `focus(options?: FocusOptions): void`
   - property `isOpen: import("@angular/core").Signal<boolean>`
 - Component · UiSelectOption · selector: `ui-option`
+  - input `value: T`
+  - input `disabled?: boolean`
+  - input `label?: string | undefined`
 - Component · UiSelectOptionGroup · selector: `ui-optgroup`
   - input `label: string`
+  - input `disabled?: boolean`
 
 ## @usertrv/ui/skeleton
 
@@ -565,8 +594,8 @@
   - input `maxWidth?: number` = `1200`
   - input `resizable?: boolean | undefined` = `undefined`
   - input `align?: UiColumnAlign` = `'start'`
-  - input `value?: ((row: T) => unknown`
-  - input `compare?: ((a: T, b: T) => number`
+  - input `value?: ((row: T) => unknown) | undefined`
+  - input `compare?: ((a: T, b: T) => number) | undefined`
 - Type · UiColumnAlign
   - `type UiColumnAlign = 'start' | 'end';`
 - Directive · UiColumnResize · selector: `[uiColumnResize]` · exportAs: uiColumnResize

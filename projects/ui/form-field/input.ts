@@ -3,6 +3,8 @@ import {
   Directive,
   ElementRef,
   InjectionToken,
+  Provider,
+  Type,
   Signal,
   booleanAttribute,
   computed,
@@ -11,7 +13,7 @@ import {
   input,
 } from '@angular/core';
 import { injectId } from '@usertrv/ui/a11y';
-import { injectUiControlState } from './control-state';
+import { injectUiControlState } from '@usertrv/ui/forms';
 
 /**
  * What `ui-form-field` needs from the control it wraps. `uiInput` implements it; other kit
@@ -32,17 +34,35 @@ export interface UiFormFieldControl {
 export const UI_FORM_FIELD_CONTROL = new InjectionToken<UiFormFieldControl>('UI_FORM_FIELD_CONTROL');
 
 /**
- * What a control needs from its enclosing `ui-form-field` (kept as a token so the input does not
- * import the field component and vice versa).
- * @internal
+ * What a control needs from its enclosing `ui-form-field` (kept as a token so controls do not
+ * import the field component and vice versa). Inject it optionally in a custom control.
  */
 export interface UiFormFieldContext {
+  /** Ids of the field's visible errors and hints, for the control's `aria-describedby`. */
   readonly describedBy: Signal<string | null>;
+  /** The field's `invalid` input: forces the error state on/off, `undefined` when not set. */
   readonly invalidOverride: Signal<boolean | undefined>;
+  /** Id of the field's `<label>`, for controls that are not labelable elements (`aria-labelledby`). */
+  readonly labelId: Signal<string | null>;
 }
 
-/** @internal */
+/** DI token of the enclosing `ui-form-field`, provided by the field to its content. */
 export const UI_FORM_FIELD_CONTEXT = new InjectionToken<UiFormFieldContext>('UI_FORM_FIELD_CONTEXT');
+
+/**
+ * Registers a component as the control of an enclosing `ui-form-field`. The component exposes the
+ * contract as its `formFieldControl` member (kept separate so the component's own `required` /
+ * `id` inputs keep their meaning).
+ *
+ * ```ts
+ * providers: [provideUiFormFieldControl(UiSelect)]
+ * ```
+ */
+export function provideUiFormFieldControl(
+  component: Type<{ readonly formFieldControl: UiFormFieldControl }>,
+): Provider {
+  return { provide: UI_FORM_FIELD_CONTROL, useFactory: () => inject(component, { self: true }).formFieldControl };
+}
 
 /**
  * Styles a native `<input>` or `<textarea>` and wires it to its `ui-form-field`: `id` for the label,

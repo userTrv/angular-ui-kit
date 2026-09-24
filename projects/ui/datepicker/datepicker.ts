@@ -18,7 +18,8 @@ import {
 } from '@angular/core';
 import { FormValueControl } from '@angular/forms/signals';
 import { injectId } from '@usertrv/ui/a11y';
-import { UiFormValueControl, provideUiFormValueControl } from '@usertrv/ui/forms';
+import { UI_FORM_FIELD_CONTEXT, UiFormFieldControl, provideUiFormFieldControl } from '@usertrv/ui/form-field';
+import { UiFormValueControl, injectUiControlState, provideUiFormValueControl } from '@usertrv/ui/forms';
 import { UiCalendar, UiDateFilter } from './calendar';
 import { getDateFormatPattern } from './date-locale';
 import { DateText } from './date-text';
@@ -41,7 +42,7 @@ import { DatepickerPopup } from './datepicker-popup';
   styleUrl: './datepicker.css',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideUiFormValueControl(UiDatepicker)],
+  providers: [provideUiFormValueControl(UiDatepicker), provideUiFormFieldControl(UiDatepicker)],
   host: {
     class: 'ui-datepicker',
     '[class.ui-datepicker--disabled]': 'isDisabled()',
@@ -100,10 +101,13 @@ export class UiDatepicker implements FormValueControl<Date | null>, UiFormValueC
   readonly formModel = this.value;
 
   private readonly formDisabled = signal(false);
+  private readonly state = injectUiControlState();
+  private readonly formField = inject(UI_FORM_FIELD_CONTEXT, { optional: true });
   /** Own touched flag for use without Signal Forms; follows the `touched` input when it changes. */
   private readonly interacted = linkedSignal(() => this.touched());
   private readonly field = viewChild.required<ElementRef<HTMLElement>>('field');
   private readonly toggleButton = viewChild<ElementRef<HTMLButtonElement>>('toggleButton');
+  private readonly inputEl = viewChild<ElementRef<HTMLInputElement>>('input');
   private readonly popupTemplate = viewChild.required<TemplateRef<unknown>>('popupTemplate');
 
   protected readonly dateText = new DateText(this.value, (date) => this.value.set(date), this.locale);
@@ -121,12 +125,34 @@ export class UiDatepicker implements FormValueControl<Date | null>, UiFormValueC
     return !!value && !isWithinBounds(value, this.min(), this.max());
   });
   protected readonly showInvalid = computed(
-    () => (this.invalid() && this.interacted()) || this.dateText.parseError() || this.outOfBounds(),
+    () =>
+      this.formField?.invalidOverride() ??
+      ((this.invalid() && this.interacted()) ||
+        // Reactive Forms / ngModel: the bound control's state (Signal Forms binds `invalid` above).
+        (this.state.source() === 'forms' && this.state.errorVisible()) ||
+        this.dateText.parseError() ||
+        this.outOfBounds()),
   );
+  protected readonly isRequired = computed(() => this.required() || this.state.required());
+  protected readonly describedBy = computed(
+    () => [this.ariaDescribedby(), this.formField?.describedBy()].filter(Boolean).join(' ') || null,
+  );
+  /** @internal Contract for an enclosing `ui-form-field`. */
+  readonly formFieldControl: UiFormFieldControl = {
+    id: this.inputId,
+    errorVisible: this.showInvalid,
+    required: this.isRequired,
+    focus: () => this.focus(),
+  };
 
   /** Opens the calendar popup and moves focus into it. */
   open(): void {
     if (!this.isDisabled() && !this.readonly()) this.popup.open();
+  }
+
+  /** Moves focus to the text input. */
+  focus(options?: FocusOptions): void {
+    this.inputEl()?.nativeElement.focus(options);
   }
 
   /** Closes the calendar popup and returns focus to the toggle button. */

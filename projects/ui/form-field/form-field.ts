@@ -2,15 +2,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   Directive,
+  DOCUMENT,
   ViewEncapsulation,
   computed,
   contentChild,
   contentChildren,
+  forwardRef,
   inject,
   input,
 } from '@angular/core';
 import { injectId } from '@usertrv/ui/a11y';
-import { UI_FORM_FIELD_CONTEXT, UI_FORM_FIELD_CONTROL, UiFormFieldContext } from './input';
+import { UI_FORM_FIELD_CONTEXT, UI_FORM_FIELD_CONTROL, UiFormFieldContext, UiInput } from './input';
 
 export type UiFormFieldSize = 'sm' | 'md' | 'lg';
 
@@ -105,6 +107,7 @@ export class UiSuffix {}
     class: 'ui-form-field',
     '[class]': '"ui-form-field--" + size()',
     '[class.ui-form-field--invalid]': 'errorVisible()',
+    '[class.ui-form-field--bare]': 'bare()',
     '(click)': 'onClick($event)',
   },
 })
@@ -121,6 +124,15 @@ export class UiFormField implements UiFormFieldContext {
 
   /** The projected control (`input[uiInput]`, or any kit control providing `UI_FORM_FIELD_CONTROL`). */
   readonly control = contentChild(UI_FORM_FIELD_CONTROL);
+  private readonly label = contentChild(forwardRef(() => UiLabel));
+  /**
+   * Kit controls such as `ui-select` draw their own box; the field then only does label, hints,
+   * errors and ARIA wiring.
+   */
+  protected readonly bare = computed(() => {
+    const control = this.control();
+    return !!control && !(control instanceof UiInput);
+  });
   private readonly hints = contentChildren(UiHint);
   private readonly errors = contentChildren(UiError);
 
@@ -131,6 +143,8 @@ export class UiFormField implements UiFormFieldContext {
 
   /** @internal */
   readonly invalidOverride = this.invalid;
+  /** @internal */
+  readonly labelId = computed(() => this.label()?.id ?? null);
   /** @internal Ids of the visible errors (first) and of the hints. */
   readonly describedBy = computed(() => {
     const errorIds = this.errorVisible() ? this.errors().map((e) => e.id()) : [];
@@ -154,7 +168,7 @@ export class UiFormField implements UiFormFieldContext {
 @Component({
   selector: 'ui-label',
   template: `
-    <label class="ui-label__text" [attr.for]="field?.control()?.id()">
+    <label class="ui-label__text" [id]="id" [attr.for]="field?.control()?.id()">
       <ng-content />
       @if (field?.required()) {
         <span class="ui-label__required" aria-hidden="true">*</span>
@@ -162,10 +176,21 @@ export class UiFormField implements UiFormFieldContext {
     </label>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'ui-label' },
+  host: { class: 'ui-label', '(click)': 'onClick()' },
 })
 export class UiLabel {
   protected readonly field = inject(UiFormField, { optional: true });
+  private readonly document = inject(DOCUMENT);
+  /** DOM id of the `<label>`; controls that are not labelable elements reference it with `aria-labelledby`. */
+  readonly id = injectId('ui-label');
+
+  protected onClick(): void {
+    const control = this.field?.control();
+    if (!control) return;
+    // `<label for>` only focuses labelable elements; a `role="combobox"` trigger needs a hand.
+    const target = this.document.getElementById(control.id());
+    if (!target?.matches('input, textarea, select, button')) control.focus();
+  }
 }
 
 function booleanish(value: unknown): boolean {
