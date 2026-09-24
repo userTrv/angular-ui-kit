@@ -97,7 +97,7 @@
   box-sizing: border-box;
   max-width: 100%;
   min-height: var(--ui-control-height-sm);
-  padding: 0 var(--ui-space-2-5, 0.625rem);
+  padding: 0 var(--ui-space-2-5);
   border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-badge-radius);
   background: var(--_subtle-bg);

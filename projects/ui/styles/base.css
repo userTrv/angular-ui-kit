@@ -34,7 +34,7 @@
 .cdk-overlay-pane.ui-overlay-pane {
   font-family: var(--ui-font-family-sans);
   font-size: var(--ui-font-size-md);
-  line-height: var(--ui-line-height-normal);
+  line-height: var(--ui-font-line-height-normal);
   color: var(--ui-color-text);
 }
 
