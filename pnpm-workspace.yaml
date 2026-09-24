@@ -1,0 +1,4 @@
+packages:
+  # The library is a workspace package so Changesets can version it; the root stays the private
+  # app/tooling package that builds both the library and the docs site.
+  - projects/ui
