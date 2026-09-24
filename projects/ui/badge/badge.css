@@ -1,0 +1,166 @@
+/*
+ * Badge and tag. Solid success/warning/info/neutral use the variant's *-text colour as background
+ * with the surface colour as text: that pair is dark-on-light in the light theme and light-on-dark
+ * in the dark theme, so it keeps AA contrast in every theme without new tokens.
+ */
+.ui-badge,
+.ui-tag {
+  --_subtle-bg: var(--ui-color-surface-hover);
+  --_subtle-fg: var(--ui-color-text);
+  --_solid-bg: var(--ui-color-text);
+  --_solid-fg: var(--ui-color-surface);
+  --_dot: var(--ui-color-text-muted);
+}
+.ui-badge--primary,
+.ui-tag--primary {
+  --_subtle-bg: var(--ui-color-primary-subtle);
+  --_subtle-fg: var(--ui-color-primary-text);
+  --_solid-bg: var(--ui-color-primary);
+  --_solid-fg: var(--ui-color-on-primary);
+  --_dot: var(--ui-color-primary);
+}
+.ui-badge--success,
+.ui-tag--success {
+  --_subtle-bg: var(--ui-color-success-subtle);
+  --_subtle-fg: var(--ui-color-success-text);
+  --_solid-bg: var(--ui-color-success-text);
+  --_dot: var(--ui-color-success);
+}
+.ui-badge--warning,
+.ui-tag--warning {
+  --_subtle-bg: var(--ui-color-warning-subtle);
+  --_subtle-fg: var(--ui-color-warning-text);
+  --_solid-bg: var(--ui-color-warning-text);
+  --_dot: var(--ui-color-warning);
+}
+.ui-badge--danger,
+.ui-tag--danger {
+  --_subtle-bg: var(--ui-color-danger-subtle);
+  --_subtle-fg: var(--ui-color-danger-text);
+  --_solid-bg: var(--ui-color-danger);
+  --_solid-fg: var(--ui-color-on-danger);
+  --_dot: var(--ui-color-danger);
+}
+.ui-badge--info,
+.ui-tag--info {
+  --_subtle-bg: var(--ui-color-info-subtle);
+  --_subtle-fg: var(--ui-color-info-text);
+  --_solid-bg: var(--ui-color-info-text);
+  --_dot: var(--ui-color-info);
+}
+
+/* ---- Badge ---- */
+.ui-badge {
+  --_bg: var(--_subtle-bg);
+  --_fg: var(--_subtle-fg);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-1-5);
+  box-sizing: border-box;
+  height: 1.375rem;
+  padding: 0 var(--ui-space-2);
+  border: var(--ui-border-width) solid transparent;
+  border-radius: var(--ui-badge-radius);
+  background: var(--_bg);
+  color: var(--_fg);
+  font-size: var(--ui-font-size-xs);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+  font-variant-numeric: tabular-nums;
+}
+.ui-badge--solid {
+  --_bg: var(--_solid-bg);
+  --_fg: var(--_solid-fg);
+  --_dot: currentColor;
+}
+.ui-badge--sm {
+  height: 1.125rem;
+  padding: 0 var(--ui-space-1-5);
+  font-size: 0.6875rem;
+}
+.ui-badge__dot {
+  flex: none;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: var(--ui-radius-full);
+  background: var(--_dot);
+}
+
+/* ---- Tag ---- */
+.ui-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-1);
+  box-sizing: border-box;
+  max-width: 100%;
+  min-height: var(--ui-control-height-sm);
+  padding: 0 var(--ui-space-2-5, 0.625rem);
+  border: var(--ui-border-width) solid var(--ui-color-border);
+  border-radius: var(--ui-badge-radius);
+  background: var(--_subtle-bg);
+  color: var(--_subtle-fg);
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: 1.2;
+  vertical-align: middle;
+}
+.ui-tag--removable {
+  padding-inline-end: var(--ui-space-1);
+}
+.ui-tag__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ui-tag__remove {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ui-radius-full);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.8;
+  transition:
+    background-color var(--ui-duration-fast) var(--ui-easing-standard),
+    opacity var(--ui-duration-fast) var(--ui-easing-standard);
+}
+.ui-tag__remove:hover:not(:disabled) {
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  opacity: 1;
+}
+.ui-tag__remove:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: 1px;
+  opacity: 1;
+}
+.ui-tag__remove:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+.ui-tag__remove svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.ui-tag--disabled {
+  color: var(--ui-color-text-disabled);
+}
+
+@media (forced-colors: active) {
+  .ui-badge,
+  .ui-tag {
+    border-color: CanvasText;
+  }
+  .ui-badge__dot {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+}

@@ -1,0 +1,114 @@
+.ui-avatar {
+  --_size: 2.5rem;
+
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  box-sizing: border-box;
+  width: var(--_size);
+  height: var(--_size);
+  border-radius: var(--ui-radius-full);
+  /* The subtle tokens are very light; 12% of the text colour gives the circle a visible edge. */
+  background: color-mix(
+    in srgb,
+    var(--_avatar-fg, var(--ui-avatar-text)) 12%,
+    var(--_avatar-bg, var(--ui-avatar-bg))
+  );
+  color: var(--_avatar-fg, var(--ui-avatar-text));
+  font-size: calc(var(--_size) * 0.4);
+  font-weight: var(--ui-font-weight-semibold);
+  line-height: 1;
+  vertical-align: middle;
+  user-select: none;
+}
+.ui-avatar[hidden] {
+  display: none;
+}
+.ui-avatar--xs {
+  --_size: 1.5rem;
+}
+.ui-avatar--sm {
+  --_size: 2rem;
+}
+.ui-avatar--lg {
+  --_size: 3rem;
+}
+.ui-avatar--xl {
+  --_size: 4rem;
+}
+
+.ui-avatar__image {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+.ui-avatar__initials {
+  letter-spacing: 0.02em;
+}
+.ui-avatar__placeholder {
+  width: 60%;
+  height: 60%;
+}
+
+/* Status dot: a distinct shape per status, so colour is not the only cue. */
+.ui-avatar__status {
+  --_dot: max(0.5rem, calc(var(--_size) * 0.28));
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  width: var(--_dot);
+  height: var(--_dot);
+  border: 2px solid var(--ui-color-surface);
+  border-radius: var(--ui-radius-full);
+  background: var(--ui-color-success);
+}
+.ui-avatar__status--away {
+  /* crescent */
+  background: radial-gradient(circle at 25% 25%, var(--ui-color-surface) 32%, var(--ui-color-warning) 34%);
+}
+.ui-avatar__status--busy {
+  /* "do not disturb" bar */
+  background: linear-gradient(
+    var(--ui-color-danger) 38%,
+    var(--ui-color-surface) 38%,
+    var(--ui-color-surface) 62%,
+    var(--ui-color-danger) 62%
+  );
+}
+.ui-avatar__status--offline {
+  /* hollow ring */
+  background: var(--ui-color-surface);
+  box-shadow: inset 0 0 0 2px var(--ui-color-text-muted);
+}
+
+/* ---- Group ---- */
+.ui-avatar-group {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row;
+}
+.ui-avatar-group > .ui-avatar {
+  box-shadow: 0 0 0 2px var(--ui-color-surface);
+}
+.ui-avatar-group > .ui-avatar:not(:first-child) {
+  margin-inline-start: calc(var(--_size) * -0.2);
+}
+.ui-avatar-group__overflow {
+  background: var(--ui-color-surface-hover);
+  color: var(--ui-color-text);
+  font-size: calc(var(--_size) * 0.34);
+}
+
+@media (forced-colors: active) {
+  .ui-avatar {
+    border: 1px solid CanvasText;
+  }
+  .ui-avatar__status {
+    forced-color-adjust: none;
+    border-color: Canvas;
+  }
+}

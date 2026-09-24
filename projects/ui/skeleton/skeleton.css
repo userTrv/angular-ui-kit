@@ -1,0 +1,75 @@
+.ui-skeleton {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+.ui-skeleton--text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.ui-skeleton--circle {
+  width: 2.5rem;
+  aspect-ratio: 1;
+}
+.ui-skeleton--rect {
+  height: 6rem;
+}
+
+.ui-skeleton__piece {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-color-skeleton);
+}
+.ui-skeleton--circle .ui-skeleton__piece {
+  border-radius: var(--ui-radius-full);
+}
+.ui-skeleton--rect .ui-skeleton__piece {
+  border-radius: var(--ui-radius-md);
+}
+.ui-skeleton__line {
+  height: 0.75em;
+}
+.ui-skeleton__line:last-child:not(:first-child) {
+  width: 60%;
+}
+
+.ui-skeleton__piece::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--ui-color-skeleton-shine), transparent);
+  transform: translateX(-100%);
+  animation: ui-skeleton-shimmer calc(var(--ui-duration-slow) * 5) ease-in-out infinite;
+}
+.ui-skeleton--static .ui-skeleton__piece::after {
+  display: none;
+}
+
+@keyframes ui-skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/*
+ * The duration tokens already drop to 0 under reduced motion, but a 0s infinite animation is still
+ * an animation: remove the shimmer layer so nothing runs at all.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .ui-skeleton__piece::after {
+    display: none;
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ui-skeleton__piece {
+    border: 1px solid GrayText;
+  }
+}

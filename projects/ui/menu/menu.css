@@ -1,0 +1,166 @@
+.ui-menu {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 12rem;
+  max-width: 20rem;
+  padding: var(--ui-space-1);
+  border: var(--ui-border-width) solid var(--ui-color-border);
+  border-radius: var(--ui-overlay-radius);
+  background: var(--ui-overlay-bg);
+  box-shadow: var(--ui-overlay-shadow);
+  color: var(--ui-color-text);
+  font-family: var(--ui-font-family-sans);
+  font-size: var(--ui-font-size-control);
+  line-height: var(--ui-font-line-height-normal);
+  outline: none;
+  animation: ui-menu-enter var(--ui-duration-fast) var(--ui-easing-standard);
+}
+.ui-menu:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+}
+
+.ui-menu-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.ui-menu-separator {
+  display: block;
+  height: var(--ui-border-width);
+  margin: var(--ui-space-1) calc(-1 * var(--ui-space-1));
+  background: var(--ui-color-border);
+}
+
+.ui-menu-item {
+  --_fg: var(--ui-color-text);
+  --_bg-active: var(--ui-color-surface-hover);
+
+  display: flex;
+  align-items: center;
+  gap: var(--ui-control-gap);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--ui-option-height);
+  padding: 0 var(--ui-control-padding-x);
+  border: 0;
+  border-radius: var(--ui-radius-sm);
+  background: transparent;
+  color: var(--_fg);
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--ui-duration-fast) var(--ui-easing-standard);
+}
+.ui-menu-item:hover,
+.ui-menu-item:focus,
+.ui-menu-item[aria-expanded='true'] {
+  background: var(--_bg-active);
+  outline: none;
+}
+.ui-menu-item:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: calc(-1 * var(--ui-focus-ring-width));
+}
+.ui-menu-item[aria-disabled='true'] {
+  --_fg: var(--ui-color-text-disabled);
+  cursor: not-allowed;
+}
+.ui-menu-item[aria-disabled='true']:hover {
+  background: transparent;
+}
+.ui-menu-item--destructive {
+  --_fg: var(--ui-color-danger-text);
+  --_bg-active: var(--ui-color-danger-subtle);
+}
+
+.ui-menu-item__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ui-menu-item__icon,
+.ui-menu-item__check,
+.ui-menu-item__submenu-icon {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+}
+.ui-menu-item__icon {
+  color: var(--ui-color-text-muted);
+}
+.ui-menu-item--destructive .ui-menu-item__icon {
+  color: inherit;
+}
+.ui-menu-item__shortcut {
+  margin-inline-start: var(--ui-space-4);
+  color: var(--ui-color-text-muted);
+  font-family: inherit;
+  font-size: var(--ui-font-size-xs);
+  letter-spacing: 0.02em;
+}
+.ui-menu-item__submenu-icon {
+  margin-inline-end: calc(-1 * var(--ui-space-1));
+  color: var(--ui-color-text-muted);
+}
+[dir='rtl'] .ui-menu-item__submenu-icon {
+  transform: scaleX(-1);
+}
+
+/* Checkbox / radio indicators follow aria-checked, so the visual state can never drift from ARIA. */
+.ui-menu-item__check {
+  visibility: hidden;
+  color: var(--ui-color-primary-text);
+}
+.ui-menu-item[aria-checked='true'] .ui-menu-item__check {
+  visibility: visible;
+}
+.ui-menu-item__radio {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+}
+.ui-menu-item__radio::after {
+  content: '';
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: var(--ui-radius-full);
+  background: var(--ui-color-primary-text);
+  visibility: hidden;
+}
+.ui-menu-item[aria-checked='true'] .ui-menu-item__radio::after {
+  visibility: visible;
+}
+
+@keyframes ui-menu-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+@media (forced-colors: active) {
+  .ui-menu {
+    border-color: CanvasText;
+  }
+  .ui-menu-item:hover,
+  .ui-menu-item:focus {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+  .ui-menu-item[aria-disabled='true'] {
+    color: GrayText;
+  }
+  .ui-menu-item__radio::after {
+    background: CanvasText;
+  }
+  .ui-menu-separator {
+    background: CanvasText;
+  }
+}
