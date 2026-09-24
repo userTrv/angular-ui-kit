@@ -1,0 +1,118 @@
+/* Dropdown panel shared by ui-select and ui-combobox (moved into a CDK overlay pane while open). */
+.ui-listbox-panel {
+  box-sizing: border-box;
+  /* The CDK pane is a flex container sized to the trigger: fill it. */
+  flex: 1 1 auto;
+  width: 100%;
+  max-height: min(20rem, 60vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--ui-space-1);
+  border: var(--ui-border-width) solid var(--ui-color-border);
+  border-radius: var(--ui-overlay-radius);
+  background: var(--ui-overlay-bg);
+  box-shadow: var(--ui-overlay-shadow);
+  color: var(--ui-color-text);
+  font-size: var(--ui-font-size-control);
+}
+.ui-listbox-panel:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+}
+
+.ui-option {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  box-sizing: border-box;
+  min-height: var(--ui-option-height);
+  padding: var(--ui-space-1) var(--ui-space-2);
+  border-radius: var(--ui-radius-sm);
+  cursor: pointer;
+  user-select: none;
+}
+.ui-option:hover {
+  background: var(--ui-color-surface-hover);
+}
+.ui-option[data-active] {
+  background: var(--ui-color-primary-subtle);
+  /* Kept visible for keyboard users even without colour: see forced-colors below. */
+  box-shadow: inset 2px 0 0 var(--ui-color-primary);
+}
+.ui-option[aria-selected='true'] {
+  color: var(--ui-color-primary-text);
+  font-weight: var(--ui-font-weight-medium);
+}
+.ui-option[aria-disabled='true'] {
+  color: var(--ui-color-text-disabled);
+  cursor: not-allowed;
+  background: none;
+}
+.ui-option__check {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  visibility: hidden;
+}
+.ui-option[aria-selected='true'] .ui-option__check {
+  visibility: visible;
+}
+.ui-option__content {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: var(--ui-space-2);
+}
+
+/* Multi-select: the check becomes a checkbox square. */
+[aria-multiselectable='true'] .ui-option__check {
+  visibility: visible;
+  box-sizing: border-box;
+  border: var(--ui-border-width) solid var(--ui-color-border-strong);
+  border-radius: var(--ui-checkbox-radius);
+  color: transparent;
+}
+[aria-multiselectable='true'] .ui-option[aria-selected='true'] .ui-option__check {
+  border-color: var(--ui-color-primary);
+  background: var(--ui-color-primary);
+  color: var(--ui-color-on-primary);
+}
+
+.ui-optgroup__label {
+  padding: var(--ui-space-2) var(--ui-space-2) var(--ui-space-1);
+  color: var(--ui-color-text-muted);
+  font-size: var(--ui-font-size-xs);
+  font-weight: var(--ui-font-weight-semibold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.ui-optgroup + .ui-optgroup,
+.ui-option + .ui-optgroup {
+  margin-top: var(--ui-space-1);
+  border-top: var(--ui-border-width) solid var(--ui-color-border);
+}
+
+.ui-option mark {
+  background: none;
+  color: inherit;
+  font-weight: var(--ui-font-weight-semibold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (forced-colors: active) {
+  .ui-listbox-panel {
+    border-color: CanvasText;
+  }
+  .ui-option[data-active] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+  .ui-option[aria-disabled='true'] {
+    color: GrayText;
+  }
+  [aria-multiselectable='true'] .ui-option[aria-selected='true'] .ui-option__check {
+    background: Highlight;
+    color: HighlightText;
+  }
+}

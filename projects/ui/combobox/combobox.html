@@ -1,0 +1,80 @@
+<div #field class="ui-combobox__field">
+  <input
+    #input
+    class="ui-combobox__input"
+    type="text"
+    role="combobox"
+    autocomplete="off"
+    aria-autocomplete="list"
+    [id]="inputId()"
+    [attr.name]="name() || null"
+    [attr.aria-expanded]="expanded()"
+    [attr.aria-controls]="listboxId"
+    [attr.aria-activedescendant]="expanded() ? listbox().activeDescendantId() : null"
+    [attr.aria-label]="ariaLabel()"
+    [attr.aria-labelledby]="ariaLabelledby()"
+    [attr.aria-describedby]="ariaDescribedby()"
+    [attr.aria-invalid]="showInvalid() || null"
+    [attr.aria-required]="isRequired() || null"
+    [disabled]="isDisabled()"
+    [readOnly]="readonly()"
+    [placeholder]="placeholder()"
+    [value]="inputText()"
+    (input)="onInput()"
+    (keydown)="onKeydown($event)"
+    (click)="onInputClick()"
+    (blur)="onBlur()"
+  />
+  @if (status() === 'loading') {
+    <span class="ui-combobox__spinner" aria-hidden="true"></span>
+  }
+  <button
+    type="button"
+    class="ui-combobox__toggle"
+    tabindex="-1"
+    [attr.aria-label]="intl.showSuggestions"
+    [attr.aria-expanded]="expanded()"
+    [attr.aria-controls]="listboxId"
+    [disabled]="isDisabled() || readonly()"
+    (mousedown)="$event.preventDefault()"
+    (click)="onToggleClick()"
+  >
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+</div>
+
+<!-- The panel lives here while closed and is moved into the overlay while open (CDK DomPortal). -->
+<div hidden>
+  <div #panel class="ui-listbox-panel ui-combobox__panel" (mousedown)="$event.preventDefault()">
+    <div
+      uiListbox
+      class="ui-combobox__listbox"
+      uiListboxFocusMode="external"
+      uiListboxWrap
+      [uiListboxTypeahead]="false"
+      [id]="listboxId"
+      [hidden]="results().length === 0"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-labelledby]="ariaLabelledby()"
+      [attr.aria-busy]="status() === 'loading' || null"
+      [uiListboxSelection]="selection()"
+      [uiListboxCompareWith]="compareWith()"
+      (uiListboxPicked)="onPicked($event)"
+    >
+      @for (item of results(); track item) {
+        <ui-option [value]="item" [label]="display(item)">
+          @if (optionTemplate(); as custom) {
+            <ng-container *ngTemplateOutlet="custom.template; context: { $implicit: item, query: query() }" />
+          } @else {
+            <ui-highlight [text]="display(item)" [query]="query()" />
+          }
+        </ui-option>
+      }
+    </div>
+    @if (statusText(); as text) {
+      <div class="ui-combobox__status" [class.ui-combobox__status--error]="status() === 'error'">{{ text }}</div>
+    }
+  </div>
+</div>

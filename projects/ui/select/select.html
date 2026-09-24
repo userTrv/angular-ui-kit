@@ -1,0 +1,51 @@
+<div
+  #trigger
+  class="ui-select__trigger"
+  role="combobox"
+  aria-haspopup="listbox"
+  [attr.tabindex]="isDisabled() ? -1 : 0"
+  [attr.aria-controls]="listboxId"
+  [attr.aria-expanded]="isOpen()"
+  [attr.aria-activedescendant]="isOpen() ? listboxRef().activeDescendantId() : null"
+  [attr.aria-label]="ariaLabel()"
+  [attr.aria-labelledby]="ariaLabelledby()"
+  [attr.aria-describedby]="ariaDescribedby()"
+  [attr.aria-disabled]="isDisabled() || null"
+  [attr.aria-readonly]="readonly() || null"
+  [attr.aria-invalid]="showInvalid() || null"
+  [attr.aria-required]="isRequired() || null"
+  (click)="toggle()"
+  (keydown)="onKeydown($event)"
+  (blur)="onBlur()"
+>
+  <span class="ui-select__value" [class.ui-select__value--placeholder]="!displayText()">
+    {{ displayText() || placeholder() }}
+  </span>
+  <svg class="ui-select__chevron" viewBox="0 0 16 16" aria-hidden="true">
+    <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</div>
+
+<!-- The panel lives here while closed and is moved into the overlay while open (CDK DomPortal). -->
+<div hidden>
+  <div #panel class="ui-listbox-panel ui-select__panel" (mousedown)="$event.preventDefault()">
+    <div
+      uiListbox
+      class="ui-select__listbox"
+      uiListboxFocusMode="external"
+      [id]="listboxId"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-labelledby]="ariaLabelledby()"
+      [uiListboxOptions]="options()"
+      [uiListboxMultiple]="multiple()"
+      [uiListboxCompareWith]="compareWith()"
+      [uiListboxSelection]="selection()"
+      [uiListboxSelectionFollowsFocus]="!isOpen() && !multiple()"
+      [uiListboxDisabled]="isDisabled() || readonly()"
+      (uiListboxSelectionChange)="onSelectionChange($event)"
+      (uiListboxPicked)="onPicked()"
+    >
+      <ng-content />
+    </div>
+  </div>
+</div>
