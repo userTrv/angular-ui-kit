@@ -18,6 +18,7 @@ section {
   list-style: none;
   li {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 0.25rem;
     padding: 1rem;
     border: 1px solid var(--ui-color-border);

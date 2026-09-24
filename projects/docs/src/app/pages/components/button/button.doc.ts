@@ -15,7 +15,7 @@ export const doc = defineDoc({
     'An attribute component on the native element: focus, form submission, `type` and link semantics stay native. No wrapper element, no re-implemented click handling.',
   examples: [
     { title: 'Variants', component: ButtonVariantsExample, file: 'button-variants.example.ts' },
-    { title: 'Sizes and disabled', component: ButtonSizesExample, file: 'button-sizes.example.ts', description: 'Heights follow the density tokens: switch to **Compact** in the header.' },
+    { title: 'Sizes and disabled', component: ButtonSizesExample, file: 'button-sizes.example.ts', description: 'Heights follow the density tokens: switch **Density** to **Compact** (in the header, or in the navigation menu on small screens).' },
     { title: 'With icons', component: ButtonIconExample, file: 'button-icon.example.ts', description: '`uiIconButton` is square and requires an `aria-label`; a dev-mode warning catches a missing one.' },
     { title: 'Loading', component: ButtonLoadingExample, file: 'button-loading.example.ts', description: 'Loading keeps focus on the button (`aria-disabled` + `aria-busy`), unlike `disabled`, which would drop focus to `<body>`.' },
   ],

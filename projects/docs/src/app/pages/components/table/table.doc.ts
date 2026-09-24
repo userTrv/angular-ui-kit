@@ -47,7 +47,7 @@ export const doc = defineDoc({
       component: TableVirtualExample,
       file: 'table-virtual.example.ts',
       description:
-        '`virtual` renders only the rows in view (CDK virtual scroll) at the height of the `--ui-row-height` density token: switch to **Compact** in the header and the rows follow. Sorting still covers all 10 000 rows. Drag a column edge or focus a header and press **Tab** to reach its resize handle, then use the arrow keys.',
+        '`virtual` renders only the rows in view (CDK virtual scroll) at the height of the `--ui-row-height` density token: switch **Density** to **Compact** (in the header, or in the navigation menu on small screens) and the rows follow. Sorting still covers all 10 000 rows. Drag a column edge or focus a header and press **Tab** to reach its resize handle, then use the arrow keys.',
     },
     {
       title: 'Custom cell and header templates',

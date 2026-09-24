@@ -52,6 +52,14 @@
         }
       </ul>
     }
+    <!-- The header has no room for these on small screens. -->
+    <div class="sidebar__settings">
+      <p class="sidebar__heading" id="density-heading-mobile">Density</p>
+      <div class="segmented" role="group" aria-labelledby="density-heading-mobile">
+        <button type="button" [attr.aria-pressed]="theme.density() === 'comfortable'" (click)="setDensity('comfortable')">Comfortable</button>
+        <button type="button" [attr.aria-pressed]="theme.density() === 'compact'" (click)="setDensity('compact')">Compact</button>
+      </div>
+    </div>
   </nav>
   @if (navOpen()) {
     <div class="scrim" aria-hidden="true" (click)="navOpen.set(false)"></div>

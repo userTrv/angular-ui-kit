@@ -42,6 +42,7 @@
 }
 .steps {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.75rem;
   padding: 0;
   list-style: none;
@@ -77,6 +78,7 @@
 }
 .layers {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.5rem;
 }
 .layer {
@@ -110,7 +112,7 @@
 }
 @media (max-width: 600px) {
   .features {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .steps li {
     padding-left: 0;
@@ -120,7 +122,7 @@
     }
   }
   .layer {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     p {
       grid-column: 1;
     }

@@ -50,10 +50,12 @@
 }
 .page__examples {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
 }
 .page__a11y {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.5rem;
   max-width: 72ch;
   padding-left: 1.25rem;
@@ -71,6 +73,7 @@
 }
 .page__pager-link {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.125rem;
   padding: 0.75rem 1rem;
   border: 1px solid var(--ui-color-border);

@@ -128,6 +128,9 @@
     color: var(--ui-color-text);
   }
 }
+.sidebar__settings {
+  display: none;
+}
 .layout {
   display: grid;
   grid-template-columns: 16rem minmax(0, 1fr);
@@ -194,9 +197,32 @@
   .topbar__menu {
     display: inline-grid;
   }
-  .control__label,
-  .segmented {
+  .topbar,
+  .topbar__controls {
+    gap: 0.5rem;
+  }
+  /* Visually hidden, still the select's accessible name. */
+  .control__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .topbar .segmented {
     display: none;
+  }
+  .sidebar__settings {
+    display: block;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--ui-color-border);
+    .sidebar__heading {
+      margin-top: 1rem;
+    }
+    .segmented {
+      margin-left: 0.75rem;
+    }
   }
   .layout {
     grid-template-columns: minmax(0, 1fr);
