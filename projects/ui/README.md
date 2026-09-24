@@ -15,7 +15,7 @@ Documentation and live examples: https://usertrv.dev/projects/angular-ui-kit/
 
 ```ts
 import { UiButton } from '@usertrv/ui/button';
-import { UiSelect, UiOption } from '@usertrv/ui/select';
+import { UiSelect, UiSelectOption } from '@usertrv/ui/select';
 ```
 
 Peer dependencies: `@angular/core`, `@angular/common`, `@angular/forms`, `@angular/cdk` (^22.2).
