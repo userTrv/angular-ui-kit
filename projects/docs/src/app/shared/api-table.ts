@@ -14,8 +14,11 @@ import { InlineMarkupPipe } from './inline-markup';
         <code>{{ a.name }}</code>
         <span class="api__kind">{{ a.kind }}</span>
       </h3>
-      @if (a.selector || a.exportAs) {
+      @if (a.selector || a.exportAs || (a.entryPoint && a.entryPoint !== pageEntryPoint())) {
         <p class="api__meta">
+          @if (a.entryPoint && a.entryPoint !== pageEntryPoint()) {
+            <span>From: <code>{{ a.entryPoint }}</code></span>
+          }
           @if (a.selector) {
             <span>Selector: <code>{{ a.selector }}</code></span>
           }
@@ -110,4 +113,6 @@ import { InlineMarkupPipe } from './inline-markup';
 })
 export class ApiTable {
   readonly item = input.required<ApiItem>();
+  /** Entry point of the page; items from another entry point show where they are imported from. */
+  readonly pageEntryPoint = input<string>();
 }

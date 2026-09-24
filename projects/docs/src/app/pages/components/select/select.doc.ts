@@ -10,7 +10,15 @@ export const doc = defineDoc({
   category: 'Forms',
   summary: 'Select-only combobox with a listbox popup: groups, disabled options, multiple selection and typeahead.',
   entryPoint: '@usertrv/ui/select',
-  api: ['UiSelect', 'UiSelectOption', 'UiSelectOptionGroup'],
+  api: [
+    'UiSelect',
+    'UiSelectOption',
+    'UiSelectOptionGroup',
+    '@usertrv/ui/listbox#UiListbox',
+    '@usertrv/ui/listbox#UiOption',
+    '@usertrv/ui/listbox#UiOptionGroup',
+    '@usertrv/ui/listbox#createListboxPopup',
+  ],
   layering:
     'Three layers. `@usertrv/ui/listbox` is headless: `uiListbox` (selection, CDK `ActiveDescendantKeyManager`, typeahead), `uiOption`, `uiOptionGroup` and `createListboxPopup()` (CDK overlay: connected position that flips above, trigger width, repositions on scroll). `ui-option` / `ui-optgroup` add the visuals as host directives over `uiOption` / `uiOptionGroup`. `ui-select` wires a `role="combobox"` trigger to that listbox and adds the value model and forms contract. The same pieces build `ui-combobox`. **Why not `@angular/cdk/listbox`:** `CdkListbox` moves real DOM focus into the listbox, while the ARIA 1.2 combobox pattern keeps focus on the trigger or input and points at the active option with `aria-activedescendant`; its selection model is also tied to that focus handling. The listbox lives in the component\'s own view and is moved into the overlay with a `DomPortal`, so options, their ids and the key manager survive closing.',
   examples: [

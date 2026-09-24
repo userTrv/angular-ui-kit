@@ -42,7 +42,7 @@
         <h2 id="api" tabindex="-1">API</h2>
         <p class="page__note">Generated from the library source (signal inputs, models, outputs and JSDoc).</p>
         @for (item of apiItems(); track item.name) {
-          <docs-api-table [item]="item" />
+          <docs-api-table [item]="item" [pageEntryPoint]="p.doc.entryPoint" />
         }
       </section>
 

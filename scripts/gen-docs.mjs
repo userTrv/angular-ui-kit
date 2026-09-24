@@ -54,6 +54,7 @@ function firstTypeArg(text) {
   let depth = 0;
   for (let i = start + 1; i < text.length; i++) {
     const c = text[i];
+    if (c === '>' && text[i - 1] === '=') continue; // arrow of a function type, not a bracket
     if (c === '<' || c === '(' || c === '{' || c === '[') depth++;
     else if (c === '>' || c === ')' || c === '}' || c === ']') {
       if (depth === 0) return text.slice(start + 1, i).trim();
@@ -81,6 +82,84 @@ function decoratorInfo(node) {
     if (['Component', 'Directive', 'Injectable', 'Pipe'].includes(kind)) return { kind, ...meta };
   }
   return null;
+}
+
+/** Unwraps signal / emitter wrappers (InputSignal<T>, EventEmitter<T>, ...) but leaves plain types alone. */
+function memberType(text) {
+  return /^(InputSignal|InputSignalWithTransform|ModelSignal|OutputEmitterRef|OutputRef|EventEmitter|Subject|Observable)</.test(text)
+    ? firstTypeArg(text)
+    : text;
+}
+
+/**
+ * Inputs/outputs a component re-exposes from its `hostDirectives` (e.g. the menu wraps CDK menu
+ * directives). The public alias -> class member map comes from the directive's compiled `ɵdir` type,
+ * so this also works for directives that only exist as .d.ts files (Angular CDK).
+ */
+function hostDirectiveApi(node) {
+  const inputs = [];
+  const outputs = [];
+  for (const dec of ts.getDecorators(node) ?? []) {
+    const arg = ts.isCallExpression(dec.expression) ? dec.expression.arguments[0] : undefined;
+    if (!arg || !ts.isObjectLiteralExpression(arg)) continue;
+    const prop = arg.properties.find((p) => ts.isPropertyAssignment(p) && p.name.getText() === 'hostDirectives');
+    if (!prop || !ts.isArrayLiteralExpression(prop.initializer)) continue;
+    for (const el of prop.initializer.elements) {
+      if (!ts.isObjectLiteralExpression(el)) continue;
+      const get = (key) => el.properties.find((p) => ts.isPropertyAssignment(p) && p.name.getText() === key)?.initializer;
+      const dirExpr = get('directive');
+      if (!dirExpr) continue;
+      const dirType = checker.getTypeAtLocation(dirExpr); // typeof Directive
+      const instanceType = dirType.getConstructSignatures()[0]?.getReturnType();
+      if (!instanceType) continue;
+      // `ɵɵDirectiveDeclaration` resolves to `unknown`, so read the declarations' source text instead.
+      // Inherited inputs live in the base class's `ɵdir` (CdkMenuItemCheckbox extends CdkMenuItem).
+      let defText = '';
+      for (let t = instanceType; t; t = t.getBaseTypes?.()?.[0]) {
+        const cls = t.getSymbol()?.valueDeclaration;
+        const def = cls && ts.isClassDeclaration(cls) ? cls.members.find((m) => m.name?.getText() === 'ɵdir') : undefined;
+        if (def) defText += def.getText(def.getSourceFile());
+      }
+      const inputAliases = new Map([...defText.matchAll(/"?(\w+)"?: \{ "?alias"?: "(\w+)"/g)].map((m) => [m[2], m[1]]));
+      const outputBlock = [...defText.matchAll(/\}, (\{[^{}]*\}), (?:never|\[)/g)].map((m) => m[1]).join(' ');
+      // Directives from this library (source, not .d.ts) are described like any other class.
+      const srcDecl = instanceType.getSymbol()?.valueDeclaration;
+      const own =
+        srcDecl && ts.isClassDeclaration(srcDecl) && !srcDecl.getSourceFile().isDeclarationFile
+          ? describeClass(instanceType.getSymbol(), srcDecl)
+          : null;
+      const outputAliases = new Map([...outputBlock.matchAll(/"?(\w+)"?: "(\w+)"/g)].map((m) => [m[2], m[1]]));
+      const describe = (list, aliases, target, isInput) => {
+        if (!list || !ts.isArrayLiteralExpression(list)) return;
+        for (const item of list.elements) {
+          if (!ts.isStringLiteralLike(item)) continue;
+          const [publicName, exposed = publicName] = item.text.split(':').map((x) => x.trim());
+          const known = own?.[isInput ? 'inputs' : 'outputs'].find((x) => x.name === publicName);
+          if (known) {
+            target.push({ ...known, name: exposed, default: undefined, from: dirExpr.getText() });
+            continue;
+          }
+          const member = instanceType.getProperty(aliases.get(publicName) ?? publicName);
+          const typeText = member
+            ? memberType(
+                checker
+                  .typeToString(checker.getTypeOfSymbol(member), node, ts.TypeFormatFlags.NoTruncation)
+                  .replace(/import\("[^"]+"\)\./g, ''),
+              )
+            : 'unknown';
+          const description = member ? doc(member) : '';
+          target.push(
+            isInput
+              ? { name: exposed, type: typeText, required: false, twoWay: false, description, from: dirExpr.getText() }
+              : { name: exposed, type: typeText, description, from: dirExpr.getText() },
+          );
+        }
+      };
+      describe(get('inputs'), inputAliases, inputs, true);
+      describe(get('outputs'), outputAliases, outputs, false);
+    }
+  }
+  return { inputs, outputs };
 }
 
 function describeClass(symbol, node) {
@@ -142,6 +221,9 @@ function describeClass(symbol, node) {
       result.properties.push({ name, type: typeText, description });
     }
   }
+  const host = hostDirectiveApi(node);
+  result.inputs.push(...host.inputs);
+  result.outputs.push(...host.outputs);
   return result;
 }
 
@@ -225,8 +307,12 @@ const highlighter = await createHighlighter({
   themes: ['github-light-default', 'github-dark-default'],
   langs: ['angular-ts', 'typescript', 'html', 'css', 'scss', 'shellscript', 'json'],
 });
+// github-light-default's comment grey (#6E7781) is 4.2:1 on the sunken code background; darken it to
+// the theme's secondary text colour so comments pass WCAG AA (axe color-contrast).
 const highlight = (code, lang) =>
-  highlighter.codeToHtml(code, { lang, themes: { light: 'github-light-default', dark: 'github-dark-default' }, defaultColor: false });
+  highlighter
+    .codeToHtml(code, { lang, themes: { light: 'github-light-default', dark: 'github-dark-default' }, defaultColor: false })
+    .replaceAll('--shiki-light:#6E7781', '--shiki-light:#59636E');
 
 // Files are only rewritten when their content changes (and stale ones removed at the end) instead of
 // wiping the folder, so a running `ng serve` / parallel build never sees a half-empty directory.

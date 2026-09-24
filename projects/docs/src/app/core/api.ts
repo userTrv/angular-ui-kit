@@ -21,6 +21,8 @@ export interface ApiMember {
 }
 export interface ApiItem {
   name: string;
+  /** Set by findApi(): the entry point the symbol was found in. */
+  entryPoint?: string;
   kind: string;
   selector?: string;
   exportAs?: string;
@@ -34,6 +36,19 @@ export interface ApiItem {
 
 export const API = apiJson as unknown as Record<string, ApiItem[]>;
 
+/**
+ * Looks a symbol up in the page's own entry point first. `'@usertrv/ui/listbox#UiListbox'` names
+ * another entry point explicitly; a bare name that is not in the page's entry point falls back to
+ * the first entry point that exports it (headless layers documented on the styled component's page).
+ */
 export function findApi(entryPoint: string, name: string): ApiItem | undefined {
-  return API[entryPoint]?.find((item) => item.name === name);
+  const [explicitEntry, symbol] = name.includes('#') ? name.split('#') : [entryPoint, name];
+  const own = API[explicitEntry]?.find((item) => item.name === symbol);
+  if (own) return { ...own, entryPoint: explicitEntry };
+  if (name.includes('#')) return undefined;
+  for (const [entry, items] of Object.entries(API)) {
+    const item = items.find((i) => i.name === symbol);
+    if (item) return { ...item, entryPoint: entry };
+  }
+  return undefined;
 }
