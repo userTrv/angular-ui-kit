@@ -222,11 +222,11 @@ writeFileSync(goldenPath, report);
 // 2. Docs registry + highlighted example sources
 // ---------------------------------------------------------------------------------------------
 const highlighter = await createHighlighter({
-  themes: ['github-light', 'github-dark'],
+  themes: ['github-light-default', 'github-dark-default'],
   langs: ['angular-ts', 'typescript', 'html', 'css', 'scss', 'shellscript', 'json'],
 });
 const highlight = (code, lang) =>
-  highlighter.codeToHtml(code, { lang, themes: { light: 'github-light', dark: 'github-dark' }, defaultColor: false });
+  highlighter.codeToHtml(code, { lang, themes: { light: 'github-light-default', dark: 'github-dark-default' }, defaultColor: false });
 
 // Files are only rewritten when their content changes (and stale ones removed at the end) instead of
 // wiping the folder, so a running `ng serve` / parallel build never sees a half-empty directory.

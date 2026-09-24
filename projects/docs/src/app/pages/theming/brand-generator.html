@@ -1,0 +1,93 @@
+<div class="gen">
+  <div class="gen__controls">
+    <label class="gen__field">
+      <span>Brand colour</span>
+      <span class="gen__inputs">
+        <input type="color" [value]="brand()" (input)="setHex($any($event.target).value)" aria-label="Pick brand colour" />
+        <input
+          type="text"
+          class="gen__hex"
+          [value]="brand()"
+          (change)="setHex($any($event.target).value)"
+          [attr.aria-invalid]="hexError()"
+          aria-describedby="hex-hint"
+          spellcheck="false"
+          maxlength="7"
+        />
+      </span>
+    </label>
+    <p id="hex-hint" class="gen__hint" [class.gen__hint--error]="hexError()">
+      {{ hexError() ? 'Use a 6-digit hex colour, e.g. #0f766e.' : 'Any colour works: the scale is rebuilt in OKLCH and checked for contrast.' }}
+    </p>
+    <div class="gen__presets" role="group" aria-label="Presets">
+      @for (p of presets; track p.hex) {
+        <button
+          type="button"
+          class="gen__preset"
+          [style.background]="p.hex"
+          [attr.aria-label]="p.name"
+          [attr.aria-pressed]="brand() === p.hex"
+          [title]="p.name"
+          (click)="setHex(p.hex)"
+        ></button>
+      }
+    </div>
+    <div class="docs-row">
+      <button uiButton [variant]="applied() ? 'secondary' : 'primary'" (click)="applied.set(!applied())" [attr.aria-pressed]="applied()">
+        {{ applied() ? 'Reset site colours' : 'Apply to this site' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="gen__scale" tabindex="0" role="region" aria-label="Generated scale with contrast ratios">
+    <table>
+      <caption class="ui-sr-only">Generated brand scale</caption>
+      <thead>
+        <tr>
+          <th scope="col">Step</th>
+          <th scope="col">Colour</th>
+          <th scope="col">vs white</th>
+          <th scope="col">vs black</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (s of palette(); track s.step) {
+          <tr>
+            <th scope="row">{{ s.step }}</th>
+            <td>
+              <span class="gen__swatch" [style.background]="s.hex" aria-hidden="true"></span>
+              <code>{{ s.hex }}</code>
+            </td>
+            <td>
+              {{ s.onWhite.toFixed(2) }} <span class="gen__rating" [attr.data-rating]="rating(s.onWhite)">{{ rating(s.onWhite) }}</span>
+            </td>
+            <td>
+              {{ s.onBlack.toFixed(2) }} <span class="gen__rating" [attr.data-rating]="rating(s.onBlack)">{{ rating(s.onBlack) }}</span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="gen__previews">
+    <div class="gen__preview" data-ui-theme="light" [attr.style]="previewStyle()">
+      <p class="gen__preview-title">Light</p>
+      <div class="docs-row">
+        <button uiButton variant="primary">Primary</button>
+        <button uiButton variant="outline">Outline</button>
+        <a href="#/theming" class="gen__link">Text link</a>
+      </div>
+    </div>
+    <div class="gen__preview" data-ui-theme="dark" [attr.style]="previewStyleDark()">
+      <p class="gen__preview-title">Dark</p>
+      <div class="docs-row">
+        <button uiButton variant="primary">Primary</button>
+        <button uiButton variant="outline">Outline</button>
+        <a href="#/theming" class="gen__link">Text link</a>
+      </div>
+    </div>
+  </div>
+
+  <docs-code-block [code]="css()" [html]="cssHtml()" label="Generated brand CSS" />
+</div>

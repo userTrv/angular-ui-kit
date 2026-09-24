@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { SNIPPETS } from '../../generated/snippets';
 import { CodeBlock } from '../../shared/code-block';
+import { BrandGenerator } from './brand-generator';
 import { DENSITIES, THEMES, TOKEN_ROWS, TokenTier, displayValue } from './tokens';
 
 @Component({
   selector: 'docs-theming-page',
-  imports: [CodeBlock],
+  imports: [CodeBlock, BrandGenerator],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './theming-page.html',
   styleUrl: './theming-page.scss',
