@@ -49,3 +49,10 @@ Thumbs.db
 /projects/docs/src/app/generated
 # Playwright a11y run artefacts
 /test-results
+
+# Секреты и ключи
+.env
+.env.*
+!.env.example
+*.pem
+*.key
